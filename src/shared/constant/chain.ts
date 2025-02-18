@@ -78,7 +78,8 @@ export const AvailableL1Chain = ['mainnet', 'local'];
 
 export const getRpcUrl = (index: number): string => {
   if (index === 0) return 'http://localhost:8545';
-  return `http://127.0.0.1:954${4 + index}`;
+  let port = 9544 + index;
+  return `http://127.0.0.1:${port}`;
 };
 
 export const getDefinedChain = (

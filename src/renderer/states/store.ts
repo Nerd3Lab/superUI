@@ -4,6 +4,7 @@ import { configureStore } from '@reduxjs/toolkit';
 // import { RefreshSlide } from './refresh/reducer';
 import { ChainSlide } from './chain/reducer';
 import { ModalSlide } from './modal/reducer';
+import { AccountsSlide } from './account/reducer';
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     // refresh: RefreshSlide.reducer,
     chain: ChainSlide.reducer,
     modal: ModalSlide.reducer,
+    accounts: AccountsSlide.reducer,
   },
 });
 

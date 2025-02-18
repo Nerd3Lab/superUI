@@ -7,7 +7,7 @@ import { AppUpdater } from 'electron-updater';
 export interface getAccountsInterface {
   privateKey: string;
   publicKey: `0x${string}`;
-  balance: bigint;
+  balance: string;
 }
 
 export type getAccountsResponse = getAccountsInterface[];
@@ -34,7 +34,7 @@ export class AccountService extends ParentService {
             return {
               privateKey: account.privateKey,
               publicKey: account.publicKey,
-              balance, // You might want to convert it using ethers.utils.formatEther(balance)
+              balance : balance.toString(), // You might want to convert it using ethers.utils.formatEther(balance)
             };
           }),
         );

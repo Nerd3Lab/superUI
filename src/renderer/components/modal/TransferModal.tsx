@@ -2,12 +2,17 @@ import { Icon } from '@iconify/react';
 import styled from 'styled-components';
 import { TransferIcon } from '../../../../public/icons/transfer';
 import ButtonStyled from '../utility/ButtonStyled';
+import { getAccountsInterface } from '../../../main/services/accountService';
 
-interface Props extends SimpleComponent {}
+interface Props extends SimpleComponent {
+  account?: getAccountsInterface;
+}
 
 const TransferModalWrapper = styled.div``;
 
-function TransferModal() {
+function TransferModal({ account }: Props) {
+  const firstAccount = account;
+
   return (
     <TransferModalWrapper>
       <div className="max-w-96 w-full">

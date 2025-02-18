@@ -2,10 +2,11 @@ import styled from 'styled-components';
 import LoadingDots from '../components/utility/LoadingDots';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { useChainState } from '../states/chain/reducer';
+import { ChainSlide, useChainState } from '../states/chain/reducer';
 import { ipcRenderer } from 'electron';
 import { SupersimLog } from '../../main/services/supersimService';
 import { IDMapchain } from '../../shared/constant/chain';
+import { useAppDispatch } from '../states/hooks';
 
 interface Props extends SimpleComponent {}
 
@@ -30,13 +31,9 @@ const ProjectLoadingWrapper = styled.div`
 function ProjectLoading(props: Props) {
   const navigate = useNavigate();
   const [logs, setLogs] = useState<string[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [running, setRunning] = useState(false);
-  const [error, setError] = useState(false);
+  const dispatch = useAppDispatch();
 
   const chainState = useChainState();
-
-  console.log(logs);
 
   const startSupersim = async () => {
     await window.electron.supersim.startSupersim({
@@ -56,17 +53,21 @@ function ProjectLoading(props: Props) {
         error,
       } = message as SupersimLog;
       setLogs((prevLogs: any) => [...prevLogs, messageLog]);
-      setLoading(loading);
-      setRunning(running);
-      setError(error);
+      dispatch(
+        ChainSlide.actions.setStatus({
+          loading,
+          running,
+          error,
+        }),
+      );
     });
   }, []);
 
   useEffect(() => {
-    if (running) {
+    if (chainState.running) {
       navigate(`/dashboard/account/1/${chainState.l1[0]}`);
     }
-  }, [running]);
+  }, [chainState.running]);
 
   return (
     <ProjectLoadingWrapper className="w-full flex flex-col gap-3 items-center justify-center">

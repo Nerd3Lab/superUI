@@ -7,53 +7,36 @@ import ChainIcon from '../components/utility/ChainIcon';
 import { useChainState } from '../states/chain/reducer';
 import { useCurrentChainParams } from '../hooks/useCurrentChainParams';
 import { ipcMain } from 'electron';
-import { getAccountsInterface, getAccountsResponse } from '../../main/services/accountService';
+import {
+  getAccountsInterface,
+  getAccountsResponse,
+} from '../../main/services/accountService';
 import { formatEther } from 'viem';
 import CopyText from '../components/utility/CopyText';
 import Modal from '../components/utility/Modal';
 import { useDispatch } from 'react-redux';
 import { openModal } from '../states/modal/reducer';
 import AccountDetailModal from '../components/modal/AccountDetailModal';
+import TransferModal from '../components/modal/TransferModal';
+import { useAccountsState } from '../states/account/reducer';
 
 interface Props extends SimpleComponent {}
 
 const DashboardAccountRouteWrapper = styled.div``;
 
 function DashboardAccountRoute(props: Props) {
-  const navigate = useNavigate();
-  const [page, setPage] = useState(1);
   const dispatch = useDispatch();
-  const chainState = useChainState();
-  const [selectedAccount, setSelectedAccount] = useState<getAccountsInterface>();
+  const [selectedAccount, setSelectedAccount] =
+    useState<getAccountsInterface>();
 
-  const { layer, chainId } = useCurrentChainParams();
-  const [accounts, setAccounts] = useState<getAccountsResponse>([]);
-  const getAccounts = async () => {
-    // Call get-accounts from main process
-    const chain = chainState.chainConfing[chainId];
-    const accounts = await window.electron.accounts.getAccounts(chain);
-    setAccounts(accounts);
-  };
+  const { chainId } = useCurrentChainParams();
+  const accountsState = useAccountsState();
 
-  useEffect(() => {
-    let isMounted = true;
+  const accounts = accountsState[chainId] || [];
 
-    const fetchAccounts = async () => {
-      while (isMounted) {
-        await getAccounts();
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-      }
-    };
-
-    fetchAccounts();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [chainId, layer]);
-
-  const formatBalance = (balance: bigint) => {
-    return formatEther(balance);
+  const formatBalance = (balance: string) => {
+    const balanceBigInt = BigInt(balance);
+    return formatEther(balanceBigInt);
   };
 
   const openAccountKeyModal = (account: getAccountsInterface) => {
@@ -61,11 +44,21 @@ function DashboardAccountRoute(props: Props) {
     dispatch(openModal('accountKey'));
   };
 
+  const openTransferModal = (account: getAccountsInterface) => {
+    setSelectedAccount(account);
+    dispatch(openModal('transfer'));
+  };
+
   return (
     <DashboardAccountRouteWrapper className="p-4">
       <Modal modalId="accountKey">
         <AccountDetailModal account={selectedAccount} />
       </Modal>
+
+      <Modal modalId="transfer">
+        <TransferModal account={selectedAccount} />
+      </Modal>
+
       <div className="shadow-sm bg-white p-5 rounded-2xl border-1 border-gray-200">
         <div className="flex justify-between text-gray-700 text-base">
           <p>MNEMONIC</p>
@@ -107,7 +100,7 @@ function DashboardAccountRoute(props: Props) {
                 <td className="text-left">{formatBalance(account.balance)}</td>
                 <td className="text-left">0</td>
                 <td className="text-left">{index}</td>
-                <td className="text-left">
+                <td className="text-left flex gap-2 items-center">
                   <div
                     className="flex items-center"
                     onClick={() => openAccountKeyModal(account)}
@@ -115,6 +108,16 @@ function DashboardAccountRoute(props: Props) {
                     <Icon
                       icon="material-symbols:key"
                       className="cursor-pointer text-brand-300 text-2xl"
+                    />
+                  </div>
+
+                  <div
+                    className="flex items-center"
+                    onClick={() => openTransferModal(account)}
+                  >
+                    <Icon
+                      icon="ph:hand-deposit-fill"
+                      className="cursor-pointer text-blue-500 text-2xl"
                     />
                   </div>
                 </td>

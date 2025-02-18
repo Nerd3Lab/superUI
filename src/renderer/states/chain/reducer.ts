@@ -11,14 +11,17 @@ interface ChainState {
   mode?: 'fork' | 'quick';
   name?: string;
   isLoading?: boolean;
+  loading: null | boolean;
+  running: null | boolean;
+  error: null | boolean;
   l1: typeChainID[];
   l2: typeChainID[];
   chainIndex: {
     [key in typeChainID]?: number;
   };
-  chainLogsPath:{
+  chainLogsPath: {
     [key in typeChainID]?: string;
-  }
+  };
   chainConfing: {
     [key in typeChainID]?: {
       name: string;
@@ -41,6 +44,9 @@ const initialState: ChainState = {
   mode: undefined,
   name: undefined,
   isLoading: false,
+  loading: null,
+  running: null,
+  error: null,
   l1: [],
   l2: [],
   chainConfing: {},
@@ -49,7 +55,7 @@ const initialState: ChainState = {
 };
 
 interface forkModePayloadInterface {
-  name:string;
+  name: string;
   l2: typeChain[];
 }
 
@@ -82,31 +88,50 @@ export const ChainSlide = createSlice({
       state.l2 = payload.l2.map((chain) => chainMapID[chain]);
       state.chainIndex = {
         [chainMapID.mainnet]: 0,
-        ...payload.l2.reduce((acc, chain, index) => {
-          acc[chainMapID[chain]] = index + 1;
-          return acc;
-        }, {} as { [key in typeChainID]?: number }),
+        ...payload.l2.reduce(
+          (acc, chain, index) => {
+            acc[chainMapID[chain]] = index + 1;
+            return acc;
+          },
+          {} as { [key in typeChainID]?: number },
+        ),
       };
       state.chainConfing = {
         [chainMapID.mainnet]: getDefinedChain('mainnet', 0),
-        ...payload.l2.reduce((acc, chain, index) => {
-          acc[chainMapID[chain]] = getDefinedChain(chain, index + 1);
-          return acc;
-        }, {} as { [key in typeChainID]?: ReturnType<typeof getDefinedChain> }),
+        ...payload.l2.reduce(
+          (acc, chain, index) => {
+            acc[chainMapID[chain]] = getDefinedChain(chain, index + 1);
+            return acc;
+          },
+          {} as { [key in typeChainID]?: ReturnType<typeof getDefinedChain> },
+        ),
       };
     },
     exitMode(state) {
       state.mode = undefined;
       state.name = undefined;
       state.isLoading = false;
+      state.loading = null;
+      state.running = null;
+      state.error = null;
       state.l1 = [];
       state.l2 = [];
       state.chainIndex = {};
       state.chainConfing = {};
     },
+    setStatus(
+      state,
+      {
+        payload,
+      }: { payload: { loading: boolean; running: boolean; error: boolean } },
+    ) {
+      state.loading = payload.loading;
+      state.running = payload.running;
+      state.error = payload.error;
+    },
   },
 });
 
 export const useChainState = () => useAppSelector((state) => state.chain);
-export const { runQuickMode } = ChainSlide.actions;
+export const { runQuickMode, setStatus, exitMode } = ChainSlide.actions;
 export default ChainSlide.reducer;

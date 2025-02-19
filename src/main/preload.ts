@@ -1,8 +1,12 @@
 // Disable no-unused-vars, broken for spread args
 /* eslint no-unused-vars: off */
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
-import { getAccountsResponse } from './services/accountService';
+import {
+  getAccountsResponse,
+  sendTransactionInterface,
+} from './services/accountService';
 import { SupersimStartArgs } from './services/supersimService';
+import { TransactionReceipt } from 'viem';
 
 export type Channels =
   | 'ipc-example'
@@ -36,6 +40,12 @@ const electronHandler = {
     getAccounts: (chain: any) =>
       ipcRenderer.invoke('get-accounts', chain) as Promise<getAccountsResponse>,
     // updateAccount: (id: string, name: string) => ipcRenderer.invoke('update-account', id, name),
+    sendTransaction: (payload: sendTransactionInterface) =>
+      ipcRenderer.invoke('send-transaction', payload) as Promise<{
+        isSuccess: boolean;
+        receipt : TransactionReceipt;
+        error: any;
+      }>,
   },
   foudry: {
     check: () =>

@@ -3,6 +3,14 @@ import styled from 'styled-components';
 import { TransferIcon } from '../../../../public/icons/transfer';
 import ButtonStyled from '../utility/ButtonStyled';
 import { getAccountsInterface } from '../../../main/services/accountService';
+import { useAccountsState } from '../../states/account/reducer';
+import { useCurrentChainParams } from '../../hooks/useCurrentChainParams';
+import { formatBalanceWei, SplitAddress } from '../../utils/index';
+import { useState } from 'react';
+import { useChainState } from '../../states/chain/reducer';
+import { useAppDispatch } from '../../states/hooks';
+import { closeModalAll } from '../../states/modal/reducer';
+import Swal from 'sweetalert2';
 
 interface Props extends SimpleComponent {
   account?: getAccountsInterface;
@@ -11,7 +19,65 @@ interface Props extends SimpleComponent {
 const TransferModalWrapper = styled.div``;
 
 function TransferModal({ account }: Props) {
-  const firstAccount = account;
+  const { chainId } = useCurrentChainParams();
+  const accounts = useAccountsState();
+  const chainState = useChainState();
+  const dispatch = useAppDispatch();
+  const currentAccountsList = accounts ? accounts[chainId] || [] : [];
+
+  const senderInit = currentAccountsList.find((e) => {
+    return e.publicKey === account?.publicKey;
+  });
+
+  const receiverInit = currentAccountsList.find((e) => {
+    return e.publicKey !== account?.publicKey;
+  });
+
+  const [sender, setSender] = useState<getAccountsInterface | undefined>(
+    senderInit,
+  );
+  const [receiver, setReceiver] = useState<getAccountsInterface | undefined>(
+    receiverInit,
+  );
+
+  const [amount, setAmount] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const handleTransfer = async () => {
+    setIsLoading(true);
+    const chain = chainState.chainConfing[chainId];
+
+    if (!sender || !receiver) {
+      return;
+    }
+
+    const res = await window.electron.accounts.sendTransaction({
+      from: sender?.publicKey,
+      to: receiver?.publicKey,
+      value: amount,
+      chain,
+      privateKey: sender?.privateKey,
+    });
+
+    if (res.isSuccess) {
+      Swal.fire({
+        icon: 'success',
+        title: 'Transfer Success',
+        showConfirmButton: false,
+        timer: 1000,
+      });
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: `Transfer Failed`,
+        text: `${res.error?.message}`,
+        showConfirmButton: true,
+      });
+    }
+
+    setIsLoading(false);
+    dispatch(closeModalAll());
+  };
 
   return (
     <TransferModalWrapper>
@@ -21,9 +87,11 @@ function TransferModal({ account }: Props) {
         </div>
         <UserTransfer
           title="From"
-          name="Account 1"
-          address="0x82ff8...386ecc"
-          balance="66.444 ETH"
+          name={sender?.publicKey ? `Account ${sender?.index}` : ''}
+          address={SplitAddress(sender?.publicKey || '')}
+          balance={
+            sender?.balance ? `${formatBalanceWei(sender.balance)} ETH` : ''
+          }
         />
         <div className="flex justify-center mt-2">
           <div className="p-2 rounded-lg border border-brand-300">
@@ -32,18 +100,20 @@ function TransferModal({ account }: Props) {
         </div>
         <UserTransfer
           title="To"
-          name="Account 1"
-          address="0x82ff8...386ecc"
-          balance="66.444 ETH"
+          name={receiver?.publicKey ? `Account ${receiver?.index}` : ''}
+          address={SplitAddress(receiver?.publicKey || '')}
+          balance={
+            receiver?.balance ? `${formatBalanceWei(receiver.balance)} ETH` : ''
+          }
         />
         <hr className="my-3 text-gray-200" />
         <div className="flex">
           <div className="w-2/4 flex gap-2 items-center border-1 border-gray-300 border-r-0 rounded-l-xl p-3.5 py-2.5 cursor-pointer text-gray-500">
             <input
-              id="search"
-              type="text"
+              type="number"
               className="border-0 border-none placeholder-gray-300 outline-0 text-gray-800 cursor-pointer flex-1"
-              value={66.444}
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
             />
           </div>
           <div className="w-2/4 p-3.5 py-2.5 border-l-0 border border-gray-300 rounded-r-xl flex items-center justify-between">
@@ -65,7 +135,13 @@ function TransferModal({ account }: Props) {
             </div>
           </div>
         </div>
-        <ButtonStyled classContainer="mt-8">Confirm Transfer</ButtonStyled>
+        <ButtonStyled
+          onClick={handleTransfer}
+          loading={isLoading}
+          classContainer="mt-8"
+        >
+          Confirm Transfer
+        </ButtonStyled>
       </div>
     </TransferModalWrapper>
   );

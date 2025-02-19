@@ -19,6 +19,7 @@ import { openModal } from '../states/modal/reducer';
 import AccountDetailModal from '../components/modal/AccountDetailModal';
 import TransferModal from '../components/modal/TransferModal';
 import { useAccountsState } from '../states/account/reducer';
+import { formatBalanceWei } from '../utils/index';
 
 interface Props extends SimpleComponent {}
 
@@ -33,11 +34,6 @@ function DashboardAccountRoute(props: Props) {
   const accountsState = useAccountsState();
 
   const accounts = accountsState[chainId] || [];
-
-  const formatBalance = (balance: string) => {
-    const balanceBigInt = BigInt(balance);
-    return formatEther(balanceBigInt);
-  };
 
   const openAccountKeyModal = (account: getAccountsInterface) => {
     setSelectedAccount(account);
@@ -90,16 +86,16 @@ function DashboardAccountRoute(props: Props) {
             </tr>
           </thead>
           <tbody className="h-[20rem] overflow-scroll">
-            {accounts.map((account, index) => (
-              <tr className="border-b-1 border-gray-200" key={index}>
+            {accounts.map((account) => (
+              <tr className="border-b-1 border-gray-200" key={account.index}>
                 <td className="text-left py-2 flex items-center gap-2">
                   <ChainIcon chain={'account'} />
                   <span className="w-[23rem]">{account.publicKey}</span>
                   <CopyText value={account.publicKey} />
                 </td>
-                <td className="text-left">{formatBalance(account.balance)}</td>
+                <td className="text-left">{formatBalanceWei(account.balance)}</td>
                 <td className="text-left">0</td>
-                <td className="text-left">{index}</td>
+                <td className="text-left">{account.index}</td>
                 <td className="text-left flex gap-2 items-center">
                   <div
                     className="flex items-center"

@@ -91,7 +91,7 @@ function DashboardHeader(props: Props) {
   }, [chainId, layer]);
 
   return (
-    <DashboardHeaderWrapper className="w-full bg-white py-2 px-6 border-b-1 border-gray-200">
+    <DashboardHeaderWrapper className="w-full bg-white h-[8rem] flex flex-col justify-center px-6 border-b-1 border-gray-200">
       <div className="flex flex-wrap w-ful gap-12">
         <div>
           <p className="text-gray-600 mb-1 text-sm">Current Block</p>
@@ -127,14 +127,14 @@ function DashboardHeader(props: Props) {
 
       <div className="flex w-full mt-4 justify-start">
         {HeaderMenuList.map((menu) => (
-            <div
-              key={menu.title}
-              className={`cursor-pointer flex items-center gap-2 px-3 py-2 rounded transition-all ${location.pathname.includes(menu.title) ? 'text-brand-500 bg-brand-25' : 'text-gray-700 bg-white'}`}
-              onClick={() => onClickMenu(menu.title)}
-            >
-              <Icon icon={menu.icon} />
-              <p className="text-base font-semibold">{menu.title}</p>
-            </div>
+          <div
+            key={menu.title}
+            className={`cursor-pointer flex items-center gap-2 px-3 py-2 rounded transition-all ${location.pathname.includes(menu.title.toLowerCase()) ? 'text-brand-500 bg-brand-25' : 'text-gray-700 bg-white'}`}
+            onClick={() => onClickMenu(menu.title)}
+          >
+            <Icon icon={menu.icon} />
+            <p className="text-base font-semibold">{menu.title}</p>
+          </div>
         ))}
       </div>
     </DashboardHeaderWrapper>

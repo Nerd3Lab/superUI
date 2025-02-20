@@ -3,12 +3,25 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { typeChainID } from '../../../shared/constant/chain';
 import { TransactionType } from '../../../main/services/transactionService';
+import { useAppSelector } from '../hooks';
 
-type TransactionState = {
+type TransactionItem = {
   [key in typeChainID]?: TransactionType[];
 };
 
-const initialState: TransactionState = {};
+type TransactionExist = {
+  [key: string]: boolean;
+}
+
+interface TransactionState {
+  items: TransactionItem;
+  isExist: TransactionExist;
+}
+
+const initialState: TransactionState = {
+  items: {},
+  isExist: {},
+};
 
 export const TransactionSlide = createSlice({
   name: 'transaction',
@@ -26,13 +39,22 @@ export const TransactionSlide = createSlice({
       },
     ) {
       const { chainId, transaction } = payload;
-      if (!state[chainId]) {
-        state[chainId] = [];
+
+      if (state.isExist[transaction.hash]) {
+        return;
       }
-      state[chainId]?.push(transaction);
+
+      state.isExist[transaction.hash] = true;
+
+      if (!state.items[chainId]) {
+        state.items[chainId] = [];
+      }
+
+      state.items[chainId]?.unshift(transaction);
     }
   },
 });
 
+export const useTransactionsState = () => useAppSelector((state) => state.transaction);
 export const {} = TransactionSlide.actions;
 export default TransactionSlide.reducer;

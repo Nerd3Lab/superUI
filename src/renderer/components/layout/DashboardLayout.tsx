@@ -14,7 +14,9 @@ function DashboardLayout(props: Props) {
       <DashboardSidebar />
       <div className="grow">
         <DashboardHeader />
-        <div className="py-5 px-6 h-full bg-white">{props.children}</div>
+        <div className="py-5 px-6 h-full bg-white" style={
+          { height: 'calc(100vh - 10rem)' }
+        }>{props.children}</div>
       </div>
     </DashboardLayoutWrapper>
   );

@@ -12,6 +12,13 @@ export interface subscribeToChainInterface {
   chain: ChainConfigType;
 }
 
+export type LoggingType = {
+  address: `0x${string}`;
+  topics: string[];
+  data: `0x${string}`;
+}
+
+
 export type TransactionType = {
   hash: `0x${string}`;
   from: string;
@@ -19,6 +26,7 @@ export type TransactionType = {
   value: string;
   gasUsed: string;
   type: 'Transfer' | 'ContractCall' | 'ContractCreated' | 'Unknown';
+  logs?: LoggingType[];
 };
 
 export interface TransactionChainInterface {
@@ -74,6 +82,19 @@ export class TransactionService extends ParentService {
       else type = 'ContractCall';
 
       const receipt = await client.getTransactionReceipt({ hash: txHash });
+
+      const logsTransform = receipt?.logs.map((log) => {
+        const topics = log.topics.map((topic) => {
+          return topic.toString();
+        });
+
+        return {
+          address: log.address,
+          topics,
+          data: log.data,
+        };
+      });
+
       return {
         hash: tx.hash,
         from: tx.from,
@@ -81,7 +102,7 @@ export class TransactionService extends ParentService {
         value: tx.value.toString(),
         gasUsed: receipt?.gasUsed.toString(),
         type,
-        logs: receipt?.logs,
+        logs: logsTransform,
       };
     } catch (error) {
       console.error('Error processing transaction:', error);

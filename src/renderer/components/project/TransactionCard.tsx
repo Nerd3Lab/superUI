@@ -2,28 +2,32 @@ import { Icon } from '@iconify/react';
 import { ReactNode } from 'react';
 import styled from 'styled-components';
 import { StatusBadge } from '../utility/StatusBadge';
+import { formatBalanceWei, SplitAddress } from '../../utils/index';
 
 const TransactionCardWrapper = styled.div``;
 
 interface TransactionCardProps {
   tx: string;
-  status: 'transfer';
+  status: 'Transfer' | 'ContractCall' | 'ContractCreated' | 'Unknown';
   fromAddress: string;
   toAddress: string;
   gasUsed: string;
   value: string;
+  key: string;
 }
 export const TransactionCard = (props: TransactionCardProps) => {
   const {
     tx,
     fromAddress,
     gasUsed,
-    status = 'transfer',
+    status = 'Transfer',
     toAddress,
     value,
+    key,
   } = props;
+  console.log('tx', tx);
   return (
-    <TransactionCardWrapper className="rounded-xl p-5 border border-gray-200">
+    <TransactionCardWrapper key={key} className="rounded-xl p-5 border border-gray-200">
       <div className="flex w-full justify-between mb-3">
         <div>
           <div className="text-gray-600">TX HASH</div>
@@ -34,24 +38,30 @@ export const TransactionCard = (props: TransactionCardProps) => {
         </div>
       </div>
       <div className="flex">
-        <TransactionCardItem title="FROM ADDRESS" value={fromAddress} />
-        <TransactionCardItem title="TO ADDRESS" value={toAddress} />
+        <TransactionCardItem
+          title="FROM ADDRESS"
+          value={SplitAddress(fromAddress)}
+        />
+        <TransactionCardItem
+          title="TO ADDRESS"
+          value={SplitAddress(toAddress)}
+        />
         <TransactionCardItem
           title="GAS USED"
           value={
             <div className="flex gap-3 items-center">
-              <div>21055</div>
+              <div>{gasUsed}</div>
               <div className="flex gap-0.5 items-center">
-                <Icon
+                {/* <Icon
                   icon="icon-park-outline:arrow-up"
                   className="text-sm text-error-500"
-                />
-                <div className="text-sm text-error-700">170%</div>
+                /> */}
+                {/* <div className="text-sm text-error-700">170%</div> */}
               </div>
             </div>
           }
         />
-        <TransactionCardItem title="VALUE" value={value} />
+        <TransactionCardItem title="VALUE" value={`${formatBalanceWei(value, 0)} ETH`} />
       </div>
     </TransactionCardWrapper>
   );

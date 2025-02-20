@@ -1,19 +1,21 @@
 import { Provider as ReduxToolkitProvider } from 'react-redux';
 import { Route, MemoryRouter as Router, Routes } from 'react-router-dom';
 import Layout from './components/layout/Layout';
+import Initialization from './Initialization';
 import DashboardAccountRoute from './routes/DashboardAccountRoute';
 import DashboardMain from './routes/DashboardMain';
-import Initialization from './Initialization';
 import ProjectCreate from './routes/ProjectCreate';
 import ProjectRoute from './routes/ProjectRoute';
 import DashboardTransactionsRoute from './routes/TransactionsRoute';
 import { store } from './states/store';
 
-import ProjectLoading from './routes/ProjectLoading';
 import ProjectChecking from './routes/ProjectChecking';
+import ProjectLoading from './routes/ProjectLoading';
 
-import './styles/App.css';
 import 'sweetalert2/dist/sweetalert2.css';
+import DashboardEventDetailRoute from './routes/DashboardEventDetail';
+import DashboardEventsRoute from './routes/DashboardEventsRoute';
+import './styles/App.css';
 
 export default function App() {
   return (
@@ -36,6 +38,14 @@ export default function App() {
             <Route
               path="/dashboard/transactions"
               element={<DashboardTransactionsRoute />}
+            />
+            <Route
+              path="/dashboard/events"
+              element={<DashboardEventsRoute />}
+            />
+            <Route
+              path="/dashboard/events/:eventId"
+              element={<DashboardEventDetailRoute />}
             />
           </Routes>
         </Layout>

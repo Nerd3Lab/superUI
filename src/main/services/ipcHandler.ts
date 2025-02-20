@@ -1,10 +1,11 @@
 import { ipcMain, BrowserWindow } from 'electron';
 import { TimeService } from './timeService';
 import { AccountService } from './accountService';
-import { FoundryService } from './foundry';
+import { FoundryService } from './foundryService';
 import { SupersimService } from './supersimService';
-import { AppService } from './app';
+import { AppService } from './appService';
 import { AppUpdater } from 'electron-updater';
+import { TransactionService } from './transactionService';
 
 export class IpcHandler {
   private timeService: TimeService;
@@ -12,12 +13,18 @@ export class IpcHandler {
   private foundryService: FoundryService;
   private supersimService: SupersimService;
   private appService: AppService;
+  private transactionService: TransactionService;
 
   constructor(window: BrowserWindow, appUpdater: AppUpdater) {
     this.timeService = new TimeService(window, appUpdater);
     this.accountService = new AccountService(window, appUpdater);
     this.foundryService = new FoundryService(window, appUpdater);
-    this.supersimService = new SupersimService(window, appUpdater);
+    this.transactionService = new TransactionService(window, appUpdater);
+    this.supersimService = new SupersimService(
+      window,
+      appUpdater,
+      this.transactionService,
+    );
     this.appService = new AppService(window, appUpdater);
   }
 }

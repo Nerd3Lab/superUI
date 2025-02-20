@@ -5,9 +5,10 @@ import https from 'https';
 import { execSync } from 'child_process';
 import extract from 'extract-zip';
 import path from 'path';
-import { foundryBinaryPath } from './foundry';
+import { foundryBinaryPath } from './foundryService';
 import { ParentService } from './parentService';
 import { AppUpdater } from 'electron-updater';
+import { TransactionService } from './transactionService';
 
 const SUPERSIM_VERSION = '0.1.0-alpha.33'; // Update as needed
 const DOWNLOAD_BASE_URL = `https://github.com/ethereum-optimism/supersim/releases/download/${SUPERSIM_VERSION}`;
@@ -107,9 +108,12 @@ async function downloadSupersim(window: BrowserWindow) {
 }
 
 export class SupersimService extends ParentService {
-  constructor(window: BrowserWindow, appUpdater: AppUpdater) {
+  private transactionService: TransactionService;
+
+  constructor(window: BrowserWindow, appUpdater: AppUpdater,transactionServiceIn: TransactionService) {
     super(window, appUpdater);
     this.registerEvents();
+    this.transactionService = transactionServiceIn;
   }
 
   registerEvents() {

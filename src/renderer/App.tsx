@@ -30,11 +30,11 @@ export default function App() {
             {/* dashboard */}
             <Route path="/dashboard/main" element={<DashboardMain />} />
             <Route
-              path="/dashboard/account/:layer/:chainId"
+              path="/dashboard/accounts/:layer/:chainId"
               element={<DashboardAccountRoute />}
             />
             <Route
-              path="/dashboard/transactions"
+              path="/dashboard/transactions/:layer/:chainId"
               element={<DashboardTransactionsRoute />}
             />
           </Routes>

@@ -7,6 +7,21 @@ import {
 } from '../../../shared/constant/chain';
 import { useAppSelector } from '../hooks';
 
+export interface ChainConfigType {
+  name: string;
+  id: number;
+  nativeCurrency: {
+    decimals: number;
+    name: string;
+    symbol: string;
+  };
+  rpcUrls: {
+    default: {
+      http: string[];
+    };
+  };
+}
+
 interface ChainState {
   mode?: 'fork' | 'quick';
   name?: string;
@@ -23,20 +38,7 @@ interface ChainState {
     [key in typeChainID]?: string;
   };
   chainConfing: {
-    [key in typeChainID]?: {
-      name: string;
-      id: number;
-      nativeCurrency: {
-        decimals: number;
-        name: string;
-        symbol: string;
-      };
-      rpcUrls: {
-        default: {
-          http: string[];
-        };
-      };
-    };
+    [key in typeChainID]?: ChainConfigType;
   };
 }
 

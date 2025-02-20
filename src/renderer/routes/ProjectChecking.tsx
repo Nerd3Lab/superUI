@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import LoadingDots from '../components/utility/LoadingDots';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { anvilLog } from '../../main/services/foundry';
+import { anvilLog } from '../../main/services/foundryService';
 
 interface Props extends SimpleComponent {}
 

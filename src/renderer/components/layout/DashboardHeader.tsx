@@ -13,15 +13,15 @@ interface Props extends SimpleComponent {}
 const DashboardHeaderWrapper = styled.div``;
 
 const HeaderMenuList = [
+  // {
+  //   title: 'Dashboard',
+  //   icon: 'mdi:file-graph',
+  //   link: '/dashboard/main',
+  // },
   {
-    title: 'Dashboard',
-    icon: 'mdi:file-graph',
-    link: '/dashboard/main',
-  },
-  {
-    title: 'account',
+    title: 'accounts',
     icon: 'flowbite:wallet-solid',
-    link: '/dashboard/account',
+    link: '/dashboard/accounts',
   },
   {
     title: 'Transactions',
@@ -58,6 +58,7 @@ function DashboardHeader(props: Props) {
   const [blockNumber, setBlockNumber] = useState('');
 
   const onClickMenu = (title: string) => {
+    console.log(`/dashboard/${title.toLowerCase()}/${layer}/${chainId}`);
     navigate(`/dashboard/${title.toLowerCase()}/${layer}/${chainId}`);
   };
 
@@ -65,6 +66,7 @@ function DashboardHeader(props: Props) {
   const chain = chainState.chainConfing[chainId];
 
   const getBlocknumber = async () => {
+    if (!chain) return;
     const publicClient = getPublicClient(chain);
     if (!publicClient) return;
     const currentBlock = await publicClient.getBlockNumber();
@@ -111,7 +113,9 @@ function DashboardHeader(props: Props) {
 
         <div>
           <p className="text-gray-600 mb-1 text-sm">RPC Server</p>
-          <b className="text-black">{chain ? chain.rpcUrls.default.http : ""}</b>
+          <b className="text-black">
+            {chain ? chain.rpcUrls.default.http : ''}
+          </b>
         </div>
         <div className="ml-auto">
           <SerchBox
@@ -123,7 +127,6 @@ function DashboardHeader(props: Props) {
 
       <div className="flex w-full mt-4 justify-start">
         {HeaderMenuList.map((menu) => (
-          <Link to={menu.link} key={`link-menu-head-${menu.title}`}>
             <div
               key={menu.title}
               className={`cursor-pointer flex items-center gap-2 px-3 py-2 rounded transition-all ${location.pathname.includes(menu.title) ? 'text-brand-500 bg-brand-25' : 'text-gray-700 bg-white'}`}
@@ -132,7 +135,6 @@ function DashboardHeader(props: Props) {
               <Icon icon={menu.icon} />
               <p className="text-base font-semibold">{menu.title}</p>
             </div>
-          </Link>
         ))}
       </div>
     </DashboardHeaderWrapper>

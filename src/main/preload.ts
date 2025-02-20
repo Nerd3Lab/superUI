@@ -7,13 +7,15 @@ import {
 } from './services/accountService';
 import { SupersimStartArgs } from './services/supersimService';
 import { TransactionReceipt } from 'viem';
+import { subscribeToChainInterface } from './services/transactionService';
 
 export type Channels =
   | 'ipc-example'
   | 'send-message'
   | 'supersim-log'
   | 'anvil-log'
-  | 'update-downloaded';
+  | 'update-downloaded'
+  | 'transaction';
 
 const electronHandler = {
   ipcRenderer: {
@@ -43,7 +45,7 @@ const electronHandler = {
     sendTransaction: (payload: sendTransactionInterface) =>
       ipcRenderer.invoke('send-transaction', payload) as Promise<{
         isSuccess: boolean;
-        receipt : TransactionReceipt;
+        receipt: TransactionReceipt;
         error: any;
       }>,
   },
@@ -71,6 +73,9 @@ const electronHandler = {
     updateDownloaded: () =>
       ipcRenderer.invoke('update-downloaded') as Promise<void>,
   },
+  transaction:{
+    subscribe: (chain: subscribeToChainInterface) => ipcRenderer.invoke('subscribe', chain) as Promise<void>,
+  }
 };
 
 contextBridge.exposeInMainWorld('electron', electronHandler);

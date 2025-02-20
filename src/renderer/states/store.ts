@@ -5,6 +5,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { ChainSlide } from './chain/reducer';
 import { ModalSlide } from './modal/reducer';
 import { AccountsSlide } from './account/reducer';
+import { TransactionSlide } from './transaction/reducer';
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ export const store = configureStore({
     chain: ChainSlide.reducer,
     modal: ModalSlide.reducer,
     accounts: AccountsSlide.reducer,
+    transaction: TransactionSlide.reducer,
   },
 });
 

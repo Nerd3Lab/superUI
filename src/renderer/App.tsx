@@ -40,13 +40,13 @@ export default function App() {
               element={<DashboardTransactionsRoute />}
             />
             <Route
-              path="/dashboard/events"
+              path="/dashboard/events/:layer/:chainId"
               element={<DashboardEventsRoute />}
             />
-            <Route
+            {/* <Route
               path="/dashboard/events/:eventId"
               element={<DashboardEventDetailRoute />}
-            />
+            /> */}
           </Routes>
         </Layout>
       </Router>

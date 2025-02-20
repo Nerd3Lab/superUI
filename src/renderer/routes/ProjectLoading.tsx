@@ -65,7 +65,7 @@ function ProjectLoading(props: Props) {
 
   useEffect(() => {
     if (chainState.running) {
-      navigate(`/dashboard/account/1/${chainState.l1[0]}`);
+      navigate(`/dashboard/accounts/1/${chainState.l1[0]}`);
     }
   }, [chainState.running]);
 

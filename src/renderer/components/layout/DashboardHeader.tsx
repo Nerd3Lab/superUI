@@ -2,11 +2,11 @@ import { Icon } from '@iconify/react';
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import ChainIcon from '../utility/ChainIcon';
-import SerchBox from '../utility/SearchBox';
+import { getPublicClient } from '../../../shared/utils/client';
 import { useCurrentChainParams } from '../../hooks/useCurrentChainParams';
 import { useChainState } from '../../states/chain/reducer';
-import { getPublicClient } from '../../../shared/utils/client';
+import ChainIcon from '../utility/ChainIcon';
+import SerchBox from '../utility/SearchBox';
 
 interface Props extends SimpleComponent {}
 
@@ -36,7 +36,7 @@ const HeaderMenuList = [
   {
     title: 'Events',
     icon: 'mdi:event-auto',
-    link: '/dashboard',
+    link: '/dashboard/events',
   },
   {
     title: 'Logs',

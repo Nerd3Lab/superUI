@@ -47,7 +47,7 @@ export class TransactionService extends ParentService {
     ipcMain.handle(
       'subscribe',
       async (_, payload: subscribeToChainInterface) => {
-        console.log('Subscribing to chain:', payload);
+        // console.log('Subscribing to chain:', payload);
         const { chain } = payload;
         // Subscribe to chain
         const client = getPublicClient(chain);

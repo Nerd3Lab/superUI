@@ -8,6 +8,7 @@ import {
 import { SupersimStartArgs } from './services/supersimService';
 import { TransactionReceipt } from 'viem';
 import { subscribeToChainInterface } from './services/transactionService';
+import { subscribeToLogInterface } from './services/loggingService';
 
 export type Channels =
   | 'ipc-example'
@@ -15,7 +16,8 @@ export type Channels =
   | 'supersim-log'
   | 'anvil-log'
   | 'update-downloaded'
-  | 'transaction';
+  | 'transaction'
+  | 'log-update';
 
 const electronHandler = {
   ipcRenderer: {
@@ -36,6 +38,9 @@ const electronHandler = {
     },
     once(channel: Channels, func: (...args: unknown[]) => void) {
       ipcRenderer.once(channel, (_event, ...args) => func(...args));
+    },
+    off(channel: Channels, func: (...args: unknown[]) => void) {
+      ipcRenderer.removeListener(channel, func);
     },
   },
   accounts: {
@@ -73,9 +78,15 @@ const electronHandler = {
     updateDownloaded: () =>
       ipcRenderer.invoke('update-downloaded') as Promise<void>,
   },
-  transaction:{
-    subscribe: (chain: subscribeToChainInterface) => ipcRenderer.invoke('subscribe', chain) as Promise<void>,
-  }
+  transaction: {
+    subscribe: (chain: subscribeToChainInterface) =>
+      ipcRenderer.invoke('subscribe', chain) as Promise<void>,
+  },
+  log: {
+    subscribe: (chain: subscribeToLogInterface) =>
+      ipcRenderer.invoke('subscribe-log', chain) as Promise<boolean>,
+    unsubscribe: () => ipcRenderer.invoke('unsubscribe-log') as Promise<boolean>,
+  },
 };
 
 contextBridge.exposeInMainWorld('electron', electronHandler);

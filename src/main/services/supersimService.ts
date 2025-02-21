@@ -224,6 +224,8 @@ export class SupersimService extends ParentService {
               const chainID = match[1]; // Extracted ChainID
               let logPath = match[2]; // Extracted LogPath
               if (logPath) {
+                logPath = logPath.replace(/\n\nL2:/g, '').replace(/\n/g, '');
+                logPath = logPath.replace(/\\n\\nL2:/g, '').replace(/\\n/g, '');
                 chainLogsPath[chainID] = logPath;
               }
             }

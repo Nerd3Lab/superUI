@@ -45,7 +45,7 @@ export default function App() {
               element={<DashboardEventsRoute />}
             />
              <Route
-              path="/dashboard/events/:layer/:chainId"
+              path="/dashboard/logs/:layer/:chainId"
               element={<DashboardLogsRoute />}
             />
             {/* <Route

@@ -11,6 +11,8 @@ import { useChainState } from '../../states/chain/reducer';
 import { useAppDispatch } from '../../states/hooks';
 import { closeModalAll } from '../../states/modal/reducer';
 import Swal from 'sweetalert2';
+import ETHIMG from '../../../../assets/img/ETH.png';
+import AVATARIMG from '../../../../assets/img/avatar.png';
 
 interface Props extends SimpleComponent {
   account?: getAccountsInterface;
@@ -127,7 +129,7 @@ function TransferModal({ account }: Props) {
             </div>
             <div className="flex items-center gap-1">
               <img
-                src="/icons/Protocol Icon.png"
+                src={ETHIMG}
                 alt=""
                 className="w-5 h-5 rounded-full"
               />
@@ -169,7 +171,7 @@ const UserTransfer = ({
       <div className="border border-gray-300 rounded-lg py-2.5 px-3.5">
         <div className="flex justify-between">
           <div className="flex items-center gap-2">
-            <img src="/img/avatar.png" alt="" className="w-10 h-10" />
+            <img src={AVATARIMG} alt="" className="w-10 h-10" />
             <div>
               <div className="text-gray-900 font-medium">{name}</div>
               <div className="text-gray-600">{address}</div>

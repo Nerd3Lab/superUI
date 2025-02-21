@@ -54,10 +54,10 @@ yarn package
 
 ## Testing with us
 
-- On macOs (Apple chip), install superUI with download link [here](https://github.com/Nerd3Lab/superUI/releases/download/v1.1.0/SuperUI-1.1.0.dmg)
-- On macOs (Intel chip), install superUI with download link [here](https://github.com/Nerd3Lab/superUI/releases/download/v1.1.0/SuperUI-1.1.0.dmg)
-- On Windows, install superUI with download link [here](https://github.com/Nerd3Lab/superUI/releases/download/v1.1.0/SuperUI-Setup-1.1.0.exe)
-- On Linux, install superUI with download link [here](https://github.com/Nerd3Lab/superUI/releases/download/v1.1.0/SuperUI-1.1.0-arm64.AppImage)
+- On macOs (Apple chip), install superUI with download link [here](https://github.com/Nerd3Lab/superUI/releases/download/v1.1.1/SuperUI-1.1.1.dmg)
+- On macOs (Intel chip), install superUI with download link [here](https://github.com/Nerd3Lab/superUI/releases/download/v1.1.1/SuperUI-1.1.1.dmg)
+- On Windows, install superUI with download link [here](https://github.com/Nerd3Lab/superUI/releases/download/v1.1.1/SuperUI-Setup-1.1.1.exe)
+- On Linux, install superUI with download link [here](https://github.com/Nerd3Lab/superUI/releases/download/v1.1.1/SuperUI-1.1.1-arm64.AppImage)
 
 Please run command `xattr -rd com.apple.quarantine /Applications/SuperUI.app` after installation to avoid any security issues.
 

@@ -1,6 +1,6 @@
 {
   "name": "superui",
-  "version": "1.1",
+  "version": "1.1.0",
   "description": "A foundation for scalable desktop apps",
   "keywords": [
     "op-stack",
@@ -39,6 +39,7 @@
     "package": "ts-node ./.erb/scripts/clean.js dist && npm run build && electron-builder build --publish never && npm run build:dll",
     "package:all": "ts-node ./.erb/scripts/clean.js dist && npm run build && electron-builder build --publish never -m -l -w && npm run build:dll",
     "release": "ts-node ./.erb/scripts/clean.js dist && npm run build && electron-builder build -p 'onTagOrDraft' && npm run build:dll",
+    "release:all": "ts-node ./.erb/scripts/clean.js dist && npm run build && electron-builder build -p 'onTagOrDraft' -m -l -w && npm run build:dll",
     "release:nobuild": "electron-builder build -p 'onTagOrDraft'",
     "rebuild": "electron-rebuild --parallel --types prod,dev,optional --module-dir release/app",
     "prestart": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.main.dev.ts",

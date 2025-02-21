@@ -7,8 +7,8 @@
 
 <a href="https://framerusercontent.com/images/Uwfs6ift9dP0BWm3UYVTSiFJ1Qs.png"><img src="https://framerusercontent.com/images/Uwfs6ift9dP0BWm3UYVTSiFJ1Qs.png" alt="Imgur-Magic" border="0"></a>
 
-
 ## Introduction
+
 🚀 The Ultimate Ethereum & Superchain Development Playground
 
 - **Fork Any Superchain L2** Clone OP Mainnet, Base, and more for testing.
@@ -17,16 +17,47 @@
 - **Developer tools built-in** Compatible with
 
 ## Who is this for?
+
 - 👩🏻‍💻 Smart Contract Devs – Test deployments instantly.
 - 🧑🏻‍🎨 Frontend Devs – Build UIs with real data.
 - 🧑🏻‍🔬 Rollup Builders – Fine-tune network configurations.
 - 🧑🏻‍🚀 Dapp Builders – Test your app on a real network.
 - 🧑🏻‍💼 Hackers & Experimenters – Play around without limits.
 
+## Installation via build from source
+
+1. Clone the repository
+
+```bash
+git clone https://github.com/Nerd3Lab/superUI
+```
+
+2. Install dependencies
+
+```bash
+cd superUI
+yarn
+```
+
+3. Build App
+
+```bash
+yarn package
+```
+
+4. open app from /release/build
+- On macOs (Intel chip), **mac** folder (SuperUI)
+- On macOs (Apple chip), **mac-arm64** folder (SuperUI)
+- On Windows, **win-arm64-unpacked** folder (superui.exe)
+- On Linux, **linux-arm64-unpacked** folder (superui)
+
 
 ## Testing with us
-- On macOs (Apple chip), install superUI with download link [here](https://github.com/Nerd3Lab/superUI/releases/download/v1.0.10/SuperUI-1.0.10-arm64.dmg)
-- On macOs (Intel chip), install superUI with download link [here](https://github.com/Nerd3Lab/superUI/releases/download/v1.0.10/SuperUI-1.0.10.dmg)
+
+- On macOs (Apple chip), install superUI with download link [here](https://github.com/Nerd3Lab/superUI/releases/download/v1.1.0/SuperUI-1.1.0.dmg)
+- On macOs (Intel chip), install superUI with download link [here](https://github.com/Nerd3Lab/superUI/releases/download/v1.1.0/SuperUI-1.1.0.dmg)
+- On Windows, install superUI with download link [here](https://github.com/Nerd3Lab/superUI/releases/download/v1.1.0/SuperUI-Setup-1.1.0.exe)
+- On Linux, install superUI with download link [here](https://github.com/Nerd3Lab/superUI/releases/download/v1.1.0/SuperUI-1.1.0-arm64.AppImage)
 
 Please run command `xattr -rd com.apple.quarantine /Applications/SuperUI.app` after installation to avoid any security issues.
 

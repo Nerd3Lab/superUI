@@ -16,6 +16,7 @@ import 'sweetalert2/dist/sweetalert2.css';
 import DashboardEventDetailRoute from './routes/DashboardEventDetail';
 import DashboardEventsRoute from './routes/DashboardEventsRoute';
 import './styles/App.css';
+import DashboardLogsRoute from './routes/DashboardLogsRoute';
 
 export default function App() {
   return (
@@ -42,6 +43,10 @@ export default function App() {
             <Route
               path="/dashboard/events/:layer/:chainId"
               element={<DashboardEventsRoute />}
+            />
+             <Route
+              path="/dashboard/events/:layer/:chainId"
+              element={<DashboardLogsRoute />}
             />
             {/* <Route
               path="/dashboard/events/:eventId"

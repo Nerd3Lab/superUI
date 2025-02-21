@@ -33,21 +33,21 @@ const HeaderMenuList = [
     icon: 'ri:contract-fill',
     link: '/dashboard',
   },
-  {
-    title: 'Events',
-    icon: 'mdi:event-auto',
-    link: '/dashboard/events',
-  },
+  // {
+  //   title: 'Events',
+  //   icon: 'mdi:event-auto',
+  //   link: '/dashboard/events',
+  // },
   {
     title: 'Logs',
     icon: 'carbon:cloud-logging',
     link: '/dashboard',
   },
-  {
-    title: 'Settings',
-    icon: 'lets-icons:setting-fill',
-    link: '/dashboard',
-  },
+  // {
+  //   title: 'Settings',
+  //   icon: 'lets-icons:setting-fill',
+  //   link: '/dashboard',
+  // },
 ];
 
 function DashboardHeader(props: Props) {

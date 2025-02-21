@@ -25,9 +25,11 @@ export const TransactionCard = (props: TransactionCardProps) => {
     value,
     key,
   } = props;
-  console.log('tx', tx);
   return (
-    <TransactionCardWrapper key={key} className="rounded-xl p-5 border border-gray-200">
+    <TransactionCardWrapper
+      key={key}
+      className="rounded-xl p-5 border border-gray-200"
+    >
       <div className="flex w-full justify-between mb-3">
         <div>
           <div className="text-gray-600">TX HASH</div>
@@ -42,10 +44,13 @@ export const TransactionCard = (props: TransactionCardProps) => {
           title="FROM ADDRESS"
           value={SplitAddress(fromAddress)}
         />
-        <TransactionCardItem
-          title="TO ADDRESS"
-          value={SplitAddress(toAddress)}
-        />
+        {toAddress && (
+          <TransactionCardItem
+            title="TO ADDRESS"
+            value={toAddress ? SplitAddress(toAddress) : ''}
+          />
+        )}
+
         <TransactionCardItem
           title="GAS USED"
           value={
@@ -61,7 +66,10 @@ export const TransactionCard = (props: TransactionCardProps) => {
             </div>
           }
         />
-        <TransactionCardItem title="VALUE" value={`${formatBalanceWei(value, 0)} ETH`} />
+        <TransactionCardItem
+          title="VALUE"
+          value={`${formatBalanceWei(value, 0)} ETH`}
+        />
       </div>
     </TransactionCardWrapper>
   );

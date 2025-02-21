@@ -34,7 +34,7 @@ interface ChainState {
   chainIndex: {
     [key in typeChainID]?: number;
   };
-  chainLogsPath: {
+  chainLogsPath?: {
     [key in typeChainID]?: string;
   };
   chainConfing: {
@@ -120,16 +120,27 @@ export const ChainSlide = createSlice({
       state.l2 = [];
       state.chainIndex = {};
       state.chainConfing = {};
+      state.chainLogsPath = {};
     },
     setStatus(
       state,
       {
         payload,
-      }: { payload: { loading: boolean; running: boolean; error: boolean } },
+      }: {
+        payload: {
+          loading: boolean;
+          running: boolean;
+          error: boolean;
+          chainLogsPath?: {
+            [key in typeChainID]?: string;
+          };
+        };
+      },
     ) {
       state.loading = payload.loading;
       state.running = payload.running;
       state.error = payload.error;
+      state.chainLogsPath = payload.chainLogsPath;
     },
   },
 });

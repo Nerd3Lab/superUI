@@ -51,6 +51,7 @@ function ProjectLoading(props: Props) {
         loading,
         running,
         error,
+        chainLogsPath,
       } = message as SupersimLog;
       setLogs((prevLogs: any) => [...prevLogs, messageLog]);
       dispatch(
@@ -58,6 +59,7 @@ function ProjectLoading(props: Props) {
           loading,
           running,
           error,
+          chainLogsPath,
         }),
       );
     });

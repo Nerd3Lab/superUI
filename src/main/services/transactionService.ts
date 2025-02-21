@@ -16,8 +16,7 @@ export type LoggingType = {
   address: `0x${string}`;
   topics: string[];
   data: `0x${string}`;
-}
-
+};
 
 export type TransactionType = {
   hash: `0x${string}`;
@@ -27,6 +26,9 @@ export type TransactionType = {
   gasUsed: string;
   type: 'Transfer' | 'ContractCall' | 'ContractCreated' | 'Unknown';
   logs?: LoggingType[];
+  contractAddress?: string | null;
+  blockNumber: string;
+  status: "success" | "reverted" | "Failed";
 };
 
 export interface TransactionChainInterface {
@@ -71,17 +73,22 @@ export class TransactionService extends ParentService {
 
   async processTransaction(client: getPublicClientType, txHash: `0x${string}`) {
     try {
-      const tx = await client.getTransaction({
-        hash: txHash,
-      });
+      const tx = await client.getTransaction({ hash: txHash });
       if (!tx) return null;
 
-      let type = 'Unknown';
-      if (!tx.to) type = 'ContractCreated';
-      else if (tx.input === '0x') type = 'Transfer';
-      else type = 'ContractCall';
-
       const receipt = await client.getTransactionReceipt({ hash: txHash });
+
+      let type = 'Unknown';
+      let contractAddress: string | null = null;
+
+      if (!tx.to) {
+        type = 'ContractCreated';
+        contractAddress = receipt?.contractAddress || null;
+      } else if (tx.input === '0x') {
+        type = 'Transfer';
+      } else {
+        type = 'ContractCall';
+      }
 
       const logsTransform = receipt?.logs.map((log) => {
         const topics = log.topics.map((topic) => {
@@ -98,11 +105,14 @@ export class TransactionService extends ParentService {
       return {
         hash: tx.hash,
         from: tx.from,
-        to: tx.to || 'ContractCreation',
+        to: tx.to,
         value: tx.value.toString(),
         gasUsed: receipt?.gasUsed.toString(),
         type,
         logs: logsTransform,
+        contractAddress,
+        blockNumber: receipt?.blockNumber.toString(),
+        status: receipt?.status ? receipt?.status  : 'Failed',
       };
     } catch (error) {
       console.error('Error processing transaction:', error);

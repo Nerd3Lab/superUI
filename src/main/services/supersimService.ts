@@ -9,6 +9,7 @@ import { foundryBinaryPath } from './foundryService';
 import { ParentService } from './parentService';
 import { AppUpdater } from 'electron-updater';
 import { TransactionService } from './transactionService';
+import { typeChainID } from '../../shared/constant/chain';
 
 const SUPERSIM_VERSION = '0.1.0-alpha.33'; // Update as needed
 const DOWNLOAD_BASE_URL = `https://github.com/ethereum-optimism/supersim/releases/download/${SUPERSIM_VERSION}`;
@@ -21,6 +22,9 @@ export type SupersimLog = {
   loading: boolean;
   running: boolean;
   error: boolean;
+  chainLogsPath?: {
+    [key in typeChainID]?: string;
+  };
 };
 
 export type SupersimStartArgs = {
@@ -110,7 +114,11 @@ async function downloadSupersim(window: BrowserWindow) {
 export class SupersimService extends ParentService {
   private transactionService: TransactionService;
 
-  constructor(window: BrowserWindow, appUpdater: AppUpdater,transactionServiceIn: TransactionService) {
+  constructor(
+    window: BrowserWindow,
+    appUpdater: AppUpdater,
+    transactionServiceIn: TransactionService,
+  ) {
     super(window, appUpdater);
     this.registerEvents();
     this.transactionService = transactionServiceIn;
@@ -207,12 +215,26 @@ export class SupersimService extends ParentService {
           const dataString = data.toString();
 
           if (dataString.includes('Available')) {
+            const chainLogsPath: any = {};
+            const regex =
+              /ChainID:\s*(\d+)\s+RPC:\s*[^ ]+\s+LogPath:\s*([^\s]+)/g;
+
+            let match;
+            while ((match = regex.exec(dataString)) !== null) {
+              const chainID = match[1]; // Extracted ChainID
+              let logPath = match[2]; // Extracted LogPath
+              if (logPath) {
+                chainLogsPath[chainID] = logPath;
+              }
+            }
+
             if (this.isActive()) {
               this.window?.webContents?.send('supersim-log', {
                 message: dataString,
                 loading: false,
                 running: true,
                 error: false,
+                chainLogsPath,
               });
             }
           } else {

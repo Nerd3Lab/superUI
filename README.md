@@ -36,7 +36,7 @@ git clone https://github.com/Nerd3Lab/superUI
 
 ```bash
 cd superUI
-yarn
+package:all
 ```
 
 3. Build App

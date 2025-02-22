@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import DashboardLayout from './DashboardLayout';
 import MainLayout from './MainLayout';
 import PesticideButton from '../utility/PesticideButton';
+import UpdateLoading from './UpdateLoading';
 
 interface Props extends SimpleComponent {
   children: React.ReactNode;
@@ -33,6 +34,7 @@ function Layout(props: Props) {
   if (route.pathname.includes('dashboard')) {
     return (
       <LayoutWrapper className="w-full h-full relative bg-white">
+        <UpdateLoading />
         <PestisideButtonContainer />
         <DashboardLayout>{props.children}</DashboardLayout>
       </LayoutWrapper>
@@ -41,6 +43,7 @@ function Layout(props: Props) {
 
   return (
     <LayoutWrapper className="w-full h-full relative bg-white">
+      <UpdateLoading />
       <PestisideButtonContainer />
       <MainLayout>{props.children}</MainLayout>
     </LayoutWrapper>

@@ -17,7 +17,8 @@ export type Channels =
   | 'anvil-log'
   | 'update-downloaded'
   | 'transaction'
-  | 'log-update';
+  | 'log-update'
+  | 'download-progress';
 
 const electronHandler = {
   ipcRenderer: {
@@ -85,7 +86,8 @@ const electronHandler = {
   log: {
     subscribe: (chain: subscribeToLogInterface) =>
       ipcRenderer.invoke('subscribe-log', chain) as Promise<boolean>,
-    unsubscribe: () => ipcRenderer.invoke('unsubscribe-log') as Promise<boolean>,
+    unsubscribe: () =>
+      ipcRenderer.invoke('unsubscribe-log') as Promise<boolean>,
   },
 };
 

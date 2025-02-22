@@ -59,17 +59,19 @@ class AppUpdater {
         });
     });
 
-    // autoUpdater.on('download-progress', (progressObj) => {
-    //   if (this.downloadProgressDialog) {
-    //     const log_message = `Download speed: ${progressObj.bytesPerSecond} - Downloaded ${progressObj.percent}% (${progressObj.transferred}/${progressObj.total})`;
-    //     dialog.showMessageBox({
-    //       type: 'info',
-    //       title: 'Downloading Updates',
-    //       message: log_message,
-    //       buttons: [],
-    //     });
-    //   }
-    // });
+    autoUpdater.on('download-progress', (progressObj) => {
+      // if (this.downloadProgressDialog) {
+      //   const log_message = `Download speed: ${progressObj.bytesPerSecond} - Downloaded ${progressObj.percent}% (${progressObj.transferred}/${progressObj.total})`;
+      //   dialog.showMessageBox({
+      //     type: 'info',
+      //     title: 'Downloading Updates',
+      //     message: log_message,
+      //     buttons: [],
+      //   });
+      // }
+
+      mainWindow?.webContents?.send('download-progress', { progressObj });
+    });
 
     autoUpdater.on('update-downloaded', () => {
       if (this.downloadProgressDialog) {

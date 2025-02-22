@@ -1,5 +1,4 @@
 import { Icon } from '@iconify/react';
-import { ProgressInfo } from 'electron-updater';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
@@ -16,17 +15,29 @@ function UpdateLoading(props: Props) {
   const progress = (percent / 100) * circumference;
 
   useEffect(() => {
+    console.log('UpdateLoading mounted');
     window.electron.ipcRenderer.on('download-progress', (message) => {
-      const { percent } = message as ProgressInfo;
-      setPercent(percent);
+      // console.log('download-progress', message);
+      const messageParse = message as any;
+      const percentx = messageParse?.progressObj?.percent;
+      // console.log({percentx})
+      setPercent(percentx);
 
-      if (!isUpdate && percent > 0 && percent < 100) {
+      if (!isUpdate && percentx > 0 && percentx < 100) {
         setIsUpdate(true);
       }
 
-      if (percent === 100) {
+      if (percentx === 100) {
         setIsUpdate(false);
       }
+
+      // console.log({ percentx, isUpdate });
+    });
+  }, []);
+
+  useEffect(() => {
+    window.electron.ipcRenderer.on('update-downloaded-success', (message) => {
+      console.log('update-downloaded-success', { info: message });
     });
   }, []);
 

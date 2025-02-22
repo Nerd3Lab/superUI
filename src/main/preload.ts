@@ -18,7 +18,8 @@ export type Channels =
   | 'update-downloaded'
   | 'transaction'
   | 'log-update'
-  | 'download-progress';
+  | 'download-progress'
+  | 'update-downloaded-success';
 
 const electronHandler = {
   ipcRenderer: {

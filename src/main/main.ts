@@ -21,6 +21,7 @@ import { IpcHandler } from './services/ipcHandler';
 
 const electronLogsPath = log.transports.file.getFile().path;
 
+
 class AppUpdater {
   private downloadProgressDialog: Electron.MessageBoxReturnValue | null = null;
 
@@ -70,13 +71,20 @@ class AppUpdater {
       //   });
       // }
 
-      mainWindow?.webContents?.send('download-progress', { progressObj });
+      if (mainWindow && !mainWindow.isDestroyed()) {
+        mainWindow?.webContents?.send('download-progress', { progressObj });
+      }
     });
 
-    autoUpdater.on('update-downloaded', () => {
+    autoUpdater.on('update-downloaded', (info) => {
       if (this.downloadProgressDialog) {
         this.downloadProgressDialog = null;
       }
+
+      if (mainWindow && !mainWindow.isDestroyed()) {
+        mainWindow?.webContents?.send('update-downloaded-success', { info });
+      }
+
       dialog
         .showMessageBox({
           type: 'info',
@@ -159,7 +167,7 @@ const createWindow = async () => {
     if (!mainWindow) {
       throw new Error('"mainWindow" is not defined');
     }
-    // mainWindow.webContents.openDevTools();
+    mainWindow.webContents.openDevTools();
     if (process.env.START_MINIMIZED) {
       mainWindow.minimize();
     } else {

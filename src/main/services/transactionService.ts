@@ -28,7 +28,7 @@ export type TransactionType = {
   logs?: LoggingType[];
   contractAddress?: string | null;
   blockNumber: string;
-  status: "success" | "reverted" | "Failed";
+  status: 'success' | 'reverted' | 'Failed';
 };
 
 export interface TransactionChainInterface {
@@ -58,11 +58,13 @@ export class TransactionService extends ParentService {
             for (const tx of transactions) {
               const processedTx = await this.processTransaction(client, tx);
               if (processedTx) {
-                this.window?.webContents?.send('transaction', {
-                  txHash: tx,
-                  chain: chain,
-                  transaction: processedTx,
-                });
+                if (this.isActive()) {
+                  this.window?.webContents?.send('transaction', {
+                    txHash: tx,
+                    chain: chain,
+                    transaction: processedTx,
+                  });
+                }
               }
             }
           },
@@ -112,7 +114,7 @@ export class TransactionService extends ParentService {
         logs: logsTransform,
         contractAddress,
         blockNumber: receipt?.blockNumber.toString(),
-        status: receipt?.status ? receipt?.status  : 'Failed',
+        status: receipt?.status ? receipt?.status : 'Failed',
       };
     } catch (error) {
       console.error('Error processing transaction:', error);

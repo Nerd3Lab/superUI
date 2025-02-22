@@ -38,10 +38,12 @@ export class LoggingService extends ParentService {
 
             stream.on('data', (chunk) => {
               console.log('chunk', chunk.toString().trim());
-              this.window?.webContents?.send('log-update', {
-                chain: payload.chain,
-                msg: chunk.toString().trim(),
-              });
+              if (this.isActive()) {
+                this.window?.webContents?.send('log-update', {
+                  chain: payload.chain,
+                  msg: chunk.toString().trim(),
+                });
+              }
             });
 
             fileSize = newSize;

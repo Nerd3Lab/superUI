@@ -11,6 +11,8 @@ import MetalIMG from '../../../../assets/img/crypto/metal.png';
 import OrderlyIMG from '../../../../assets/img/crypto/orderly.jpg';
 import RaceIMG from '../../../../assets/img/crypto/race.jpg';
 import TBNIMG from '../../../../assets/img/crypto/tbn.png';
+import UNICHAIN from '../../../../assets/img/crypto/unichain.png';
+import CYBERIMG from '../../../../assets/img/crypto/cyber.png';
 
 const IconsDict = {
   base: BaseIMG,
@@ -28,6 +30,8 @@ const IconsDict = {
   OPChainA: OPIMG,
   OPChainB: OPIMG,
   mainnet: ETHIMG,
+  unichain: UNICHAIN,
+  cyber: CYBERIMG,
 };
 
 export type ChainListIcon = keyof typeof IconsDict;
@@ -41,7 +45,7 @@ const ChainIconWrapper = styled.div``;
 
 function ChainIcon(props: Props) {
   const classname = `${props.size === 'md' ? 'w-7 h-7' : props.size === 'lg' ? 'w-10 h-10' : props.size === 'xl' ? 'w-32 h-32' : 'w-7 h-7'}
-  rounded-full flex items-center p-1 justify-center ${props.chain ==='tbn' ? 'bg-black' : 'bg-white'}`;
+  rounded-full flex items-center p-1 justify-center ${props.chain === 'tbn' ? 'bg-black' : 'bg-white'}`;
   return (
     <ChainIconWrapper className={classname}>
       <img

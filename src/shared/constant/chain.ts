@@ -1,16 +1,18 @@
 import { defineChain } from 'viem';
 
+// [automata, base, cyber, ethernity, funki, lisk, lyra, metal, mode, op, orderly, race, shape, swan, tbn, worldchain, zora]
 export const AvailableForkChain = [
   'base',
-  'lyra',
-  'metal',
   'mode',
   'op',
-  'orderly',
-  'race',
-  'tbn',
   'zora',
+  'orderly',
+  'lyra',
+  'cyber',
+  'metal',
 ];
+
+// supersim fork --chains=base,mode,op,zora,worldchain,lyra,cyber,metal --interop.enabled
 
 export type typeChain =
   | 'base'
@@ -25,7 +27,9 @@ export type typeChain =
   | 'mainnet'
   | 'local'
   | 'OPChainA'
-  | 'OPChainB';
+  | 'OPChainB'
+  | 'worldchain'
+  | 'cyber';
 
 export type typeChainID =
   | 8453
@@ -40,7 +44,9 @@ export type typeChainID =
   | 1
   | 900
   | 901
-  | 902;
+  | 902
+  | 480
+  | 7560;
 
 export const chainMapID: { [key in typeChain]: typeChainID } = {
   base: 8453,
@@ -56,6 +62,8 @@ export const chainMapID: { [key in typeChain]: typeChainID } = {
   local: 900,
   OPChainA: 901,
   OPChainB: 902,
+  worldchain: 480,
+  cyber: 7560,
 };
 
 export const IDMapchain: { [key in typeChainID]: typeChain } = {
@@ -72,6 +80,12 @@ export const IDMapchain: { [key in typeChainID]: typeChain } = {
   900: 'local',
   901: 'OPChainA',
   902: 'OPChainB',
+  480: 'worldchain',
+  7560: 'cyber',
+};
+
+export const chainNameMap : any = {
+  worldchain: 'World',
 };
 
 export const AvailableL1Chain = ['mainnet', 'local'];
@@ -101,4 +115,3 @@ export const getDefinedChain = (
     },
   });
 };
-

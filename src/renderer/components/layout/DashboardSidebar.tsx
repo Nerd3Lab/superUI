@@ -99,20 +99,20 @@ function DashboardSidebar(props: Props) {
           ))}
         </div>
       </div>
-      <div className="absolute bg-brand-50 border border-brand-500 p-4 flex flex-col gap-3 bottom-0 left-0 rounded-xl m-4">
+      <div className="absolute bg-brand-50 border border-brand-500 p-4 flex items-start gap-3 bottom-0 left-0 rounded-xl m-4">
         <div className="flex">
           <div className="bg-brand-500 p-2.5 rounded-lg shadow-xs">
-            <Icon icon="solar:info-circle-outline" className="text-white" />
+            <Icon icon="solar:info-circle-outline" className="text-white text-xs" />
           </div>
         </div>
         <div>
-          <div className="text-gray-700 font-semibold text-sm">
-            Important Notice: Testing Environment Only
+          <div className="text-gray-700 font-semibold text-xs">
+            Important Notice: Testing Environment Only !
           </div>
-          <div className="text-gray-600 text-sm">
+          {/* <div className="text-gray-600 text-sm">
             This is a personal Superchain environment designed exclusively for
             testing and development.
-          </div>
+          </div> */}
         </div>
       </div>
     </DashboardSidebarWrapper>

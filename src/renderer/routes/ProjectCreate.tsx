@@ -2,12 +2,13 @@ import { Icon } from '@iconify/react';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { AvailableForkChain } from '../../shared/constant/chain';
+import { AvailableForkChain, chainNameMap } from '../../shared/constant/chain';
 import ButtonStyled from '../components/utility/ButtonStyled';
 import ChainIcon from '../components/utility/ChainIcon';
 import Input from '../components/utility/Input';
 import { ChainSlide } from '../states/chain/reducer';
 import { useAppDispatch } from '../states/hooks';
+import { capitalizeFirstLetter } from '../utils/index';
 
 interface Props extends SimpleComponent {}
 
@@ -171,12 +172,12 @@ function ProjectCreate(props: Props) {
             <div
               onClick={() => selectForkChainClick(chain as any)}
               key={`select-chain-${chain}`}
-              className={`project-item w-[8rem] border-1 rounded-xl py-2 flex items-center justify-center gap-2 text-black text-sm font-semibold border-gray-300 transition-all ${
+              className={`project-item w-[8.5rem] border-1 rounded-xl py-2 flex items-center justify-start pl-4 gap-2 text-black text-sm font-semibold border-gray-300 transition-all ${
                 selectForkChain.includes(chain) ? 'bg-brand-50' : 'bg-white'
               }`}
             >
-              <ChainIcon chain={chain as any} size="md" />
-              <span>{chain}</span>
+              <ChainIcon chain={chain as any} size={'md'} />
+              <span className='text-sm'>{chainNameMap[chain] || capitalizeFirstLetter(chain)}</span>
             </div>
           ))}
         </div>

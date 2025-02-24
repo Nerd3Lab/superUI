@@ -38,3 +38,6 @@ body {
 #root {
   height: 100%;
 }
+.button-hover:hover{
+background-color: #A3011F;
+}

@@ -8,7 +8,7 @@ const ChainBallWrapper = styled.div``;
 function ChainBall(props: Props) {
   return (
     <div className="w-full overflow-hidden absolute top-0 left-0 rounded-[20px]">
-      <ChainBallWrapper className="w-[110%] animate-move -translate-y-10 -translate-x-5">
+      <ChainBallWrapper className="w-[110%]  -translate-x-5">
         <img
           src={cryptoIMGSVG}
           alt="Crypto Group"

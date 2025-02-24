@@ -1,13 +1,13 @@
-import styled from 'styled-components';
-import ButtonStyled from '../components/utility/ButtonStyled';
 import { Icon } from '@iconify/react';
-import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import Input from '../components/utility/Input';
-import ChainIcon from '../components/utility/ChainIcon';
+import { Link, useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 import { AvailableForkChain } from '../../shared/constant/chain';
-import { useAppDispatch } from '../states/hooks';
+import ButtonStyled from '../components/utility/ButtonStyled';
+import ChainIcon from '../components/utility/ChainIcon';
+import Input from '../components/utility/Input';
 import { ChainSlide } from '../states/chain/reducer';
+import { useAppDispatch } from '../states/hooks';
 
 interface Props extends SimpleComponent {}
 
@@ -19,14 +19,14 @@ const ProjectCreateWrapper = styled.div`
 `;
 
 function ProjectCreate(props: Props) {
-  const [name, setName] = useState('');
+  const [name, setName] = useState<string>('');
   const [type, setType] = useState<'quick' | 'fork'>('quick');
   const [selectForkChain, setSelectForkChain] = useState<string[]>([]);
+  const [error, setError] = useState({ projectName: '', chain: '' });
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const selectForkChainClick = (chain: string) => {
-    console.log('selectForkChainClick', chain);
     if (selectForkChain.includes(chain)) {
       setSelectForkChain(selectForkChain.filter((c) => c !== chain));
     } else {
@@ -34,8 +34,8 @@ function ProjectCreate(props: Props) {
     }
   };
 
-  const onClickType = (type: 'quick' | 'fork') => {
-    if (type === 'quick') {
+  const onClickType = (newType: 'quick' | 'fork') => {
+    if (newType === 'quick') {
       setType('quick');
       setSelectForkChain([]);
     } else {
@@ -44,7 +44,21 @@ function ProjectCreate(props: Props) {
   };
 
   const submit = () => {
-    if (name === '') return;
+    setError({ projectName: '', chain: '' });
+
+    if (name.trim() === '') {
+      setError({ ...error, projectName: 'Project name is required.' });
+      return;
+    }
+
+    if (type === 'fork' && selectForkChain.length === 0) {
+      setError({
+        ...error,
+        chain: 'Please select at least one chain for fork mode.',
+      });
+      return;
+    }
+
     if (type === 'quick') {
       dispatch(ChainSlide.actions.runQuickMode({ name }));
       navigate('/loading');
@@ -55,6 +69,7 @@ function ProjectCreate(props: Props) {
       navigate('/loading');
     }
   };
+
   return (
     <ProjectCreateWrapper className="w-full flex flex-col gap-3">
       <Link to="/">
@@ -74,20 +89,22 @@ function ProjectCreate(props: Props) {
       <div className="w-full">
         <Input
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            setName(e.target.value);
+            if (error) setError({ projectName: '', chain: '' });
+          }}
           placeholder="Project Name"
+          error={error.projectName}
         />
       </div>
+      {error && <div className="text-red-500 text-sm">{error.chain}</div>}
 
       <div className="bg-gray-200 h-[1px]"></div>
-
-      {/* quick start */}
       <div
         onClick={() => onClickType('quick')}
-        className={`border-2 bg-white flex items-start px-5
-          py-6 rounded-3xl gap-3 cursor-pointer
-          transition-all project-item relative
-          ${type === 'quick' ? 'border-brand-500' : 'border-gray-200'}`}
+        className={`border-2 bg-white flex items-start px-5 py-6 rounded-3xl gap-3 cursor-pointer transition-all project-item relative ${
+          type === 'quick' ? 'border-brand-500' : 'border-gray-200'
+        }`}
       >
         <div className="bg-gray-100 text-brand-500 flex items-center justify-center rounded-full p-2">
           <Icon icon="iconamoon:file-add-duotone" className="text-2xl" />
@@ -110,12 +127,11 @@ function ProjectCreate(props: Props) {
         </div>
       </div>
 
-      {/* fork mode */}
       <div
         onClick={() => onClickType('fork')}
-        className={`border-2 border-gray-200 bg-white px-5 py-6
-      rounded-3xl cursor-pointer transition-all project-item
-      relative gap-3 flex flex-col ${type === 'fork' ? 'border-brand-500' : 'border-gray-200'}`}
+        className={`border-2 bg-white px-5 py-6 rounded-3xl cursor-pointer transition-all project-item relative gap-3 flex flex-col ${
+          type === 'fork' ? 'border-brand-500' : 'border-gray-200'
+        }`}
       >
         <div className="flex items-start gap-3">
           <div className="bg-radiant text-brand-500 flex items-center justify-center rounded-full p-2">
@@ -155,11 +171,9 @@ function ProjectCreate(props: Props) {
             <div
               onClick={() => selectForkChainClick(chain as any)}
               key={`select-chain-${chain}`}
-              className={`project-item w-[8rem] border-1 rounded-xl py-2
-                flex items-center p justify-center gap-2
-                 text-black text-sm
-                font-semibold border-gray-300 transition-all
-                ${selectForkChain.includes(chain) ? 'bg-brand-50' : 'bg-white'}`}
+              className={`project-item w-[8rem] border-1 rounded-xl py-2 flex items-center justify-center gap-2 text-black text-sm font-semibold border-gray-300 transition-all ${
+                selectForkChain.includes(chain) ? 'bg-brand-50' : 'bg-white'
+              }`}
             >
               <ChainIcon chain={chain as any} size="md" />
               <span>{chain}</span>
@@ -169,7 +183,7 @@ function ProjectCreate(props: Props) {
       </div>
 
       <div className="flex justify-end">
-        <ButtonStyled onClick={submit}>Create prject →</ButtonStyled>
+        <ButtonStyled onClick={submit}>Create project →</ButtonStyled>
       </div>
     </ProjectCreateWrapper>
   );

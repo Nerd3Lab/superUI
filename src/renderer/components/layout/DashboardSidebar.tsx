@@ -1,12 +1,11 @@
+import { Icon } from '@iconify/react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import LOGO_IMG from '../../../../assets/img/logo.svg';
-import { Icon } from '@iconify/react';
-import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
-import ChainIcon from '../utility/ChainIcon';
-import { useState } from 'react';
-import { ChainSlide, useChainState } from '../../states/chain/reducer';
 import { useCurrentChainParams } from '../../hooks/useCurrentChainParams';
+import { ChainSlide, useChainState } from '../../states/chain/reducer';
 import { useAppDispatch } from '../../states/hooks';
+import ChainIcon from '../utility/ChainIcon';
 
 interface Props extends SimpleComponent {}
 
@@ -77,7 +76,7 @@ function DashboardSidebar(props: Props) {
                 ${chainId === item?.id ? 'bg-brand-700 text-white' : 'bg-white text-gray-700'}`}
             >
               <ChainIcon chain={item?.name as any} />
-              <p className="text-base font-semibold">{item?.name}</p>
+              <p className="text-base font-semibold capitalize">{item?.name}</p>
             </div>
           ))}
         </div>
@@ -95,9 +94,25 @@ function DashboardSidebar(props: Props) {
                 ${chainId === item?.id ? 'bg-brand-700 text-white' : 'bg-white text-gray-700'}`}
             >
               <ChainIcon chain={item?.name as any} />
-              <p className="text-base font-semibold">{item?.name}</p>
+              <p className="text-base font-semibold capitalize">{item?.name}</p>
             </div>
           ))}
+        </div>
+      </div>
+      <div className="absolute bg-brand-50 border border-brand-500 p-4 flex flex-col gap-3 bottom-0 left-0 rounded-xl m-4">
+        <div className="flex">
+          <div className="bg-brand-500 p-2.5 rounded-lg shadow-xs">
+            <Icon icon="solar:info-circle-outline" className="text-white" />
+          </div>
+        </div>
+        <div>
+          <div className="text-gray-700 font-semibold text-sm">
+            Important Notice: Testing Environment Only
+          </div>
+          <div className="text-gray-600 text-sm">
+            This is a personal Superchain environment designed exclusively for
+            testing and development.
+          </div>
         </div>
       </div>
     </DashboardSidebarWrapper>

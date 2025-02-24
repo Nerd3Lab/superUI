@@ -1,24 +1,16 @@
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import styled from 'styled-components';
-import Pagination from '../components/utility/Pagination';
-import { useEffect, useState } from 'react';
 import { Icon } from '@iconify/react';
-import ChainIcon from '../components/utility/ChainIcon';
-import { useChainState } from '../states/chain/reducer';
-import { useCurrentChainParams } from '../hooks/useCurrentChainParams';
-import { ipcMain } from 'electron';
-import {
-  getAccountsInterface,
-  getAccountsResponse,
-} from '../../main/services/accountService';
-import { formatEther } from 'viem';
-import CopyText from '../components/utility/CopyText';
-import Modal from '../components/utility/Modal';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { openModal } from '../states/modal/reducer';
+import styled from 'styled-components';
+import { getAccountsInterface } from '../../main/services/accountService';
 import AccountDetailModal from '../components/modal/AccountDetailModal';
 import TransferModal from '../components/modal/TransferModal';
+import ChainIcon from '../components/utility/ChainIcon';
+import CopyText from '../components/utility/CopyText';
+import Modal from '../components/utility/Modal';
+import { useCurrentChainParams } from '../hooks/useCurrentChainParams';
 import { useAccountsState } from '../states/account/reducer';
+import { openModal } from '../states/modal/reducer';
 import { formatBalanceWei } from '../utils/index';
 
 interface Props extends SimpleComponent {}
@@ -93,7 +85,9 @@ function DashboardAccountRoute(props: Props) {
                   <span className="w-[23rem]">{account.publicKey}</span>
                   <CopyText value={account.publicKey} />
                 </td>
-                <td className="text-left">{formatBalanceWei(account.balance)}</td>
+                <td className="text-left">
+                  {formatBalanceWei(account.balance)}
+                </td>
                 <td className="text-left">0</td>
                 <td className="text-left">{account.index}</td>
                 <td className="text-left flex gap-2 items-center">
@@ -112,7 +106,7 @@ function DashboardAccountRoute(props: Props) {
                     onClick={() => openTransferModal(account)}
                   >
                     <Icon
-                      icon="ph:hand-deposit-fill"
+                      icon="fa6-solid:money-bill-transfer"
                       className="cursor-pointer text-blue-500 text-2xl"
                     />
                   </div>

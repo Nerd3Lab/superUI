@@ -36,6 +36,7 @@ git clone https://github.com/Nerd3Lab/superUI
 
 ```bash
 cd superUI
+yarn install
 yarn package:all
 ```
 

@@ -14,7 +14,7 @@
 - **Fork Any Superchain L2** Clone OP Mainnet, Base, and more for testing.
 - **Layer 2 Devnet** Deploy new chains in seconds, no RPC setup required.
 - **Pre-funded Test Accounts** Skip the faucet; start testing immediately.
-- **Developer tools built-in** Compatible with
+- **Developer tools built-in** Compatible
 
 ## Who is this for?
 
@@ -36,6 +36,7 @@ git clone https://github.com/Nerd3Lab/superUI
 
 ```bash
 cd superUI
+yarn install
 yarn package:all
 ```
 

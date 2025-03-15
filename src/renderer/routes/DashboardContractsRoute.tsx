@@ -420,10 +420,10 @@ function DashboardContractsRoute(props: Props) {
                       <button
                         key={network.name}
                         onClick={() => toggleSelection(network.name)}
-                        className={`flex items-center gap-2 p-3 rounded-lg border transition-all ${
+                        className={`flex items-center gap-2 p-3 rounded-lg border transition-all cursor-pointer ${
                           selectedChain.includes(network.name)
-                            ? 'border-red-400 bg-red-100'
-                            : 'border-gray-300 bg-white'
+                            ? 'border-brand-200 bg-brand-50'
+                            : 'border-[#E4E7EC] bg-white'
                         }`}
                       >
                         <ChainIcon chain={network.chain} className="w-6 h-6" />
@@ -443,10 +443,10 @@ function DashboardContractsRoute(props: Props) {
                 </h3>
                 <button
                   onClick={() => toggleSelection('Ethereum (Layer 1)')}
-                  className={`flex justify-center items-center gap-2 p-4 rounded-lg w-full border transition-all ${
+                  className={`flex justify-center items-center gap-2 p-4 rounded-lg w-full border transition-all cursor-pointer ${
                     selectedChain.includes('Ethereum (Layer 1)')
-                      ? 'border-red-400 bg-red-100'
-                      : 'border-gray-300 bg-white'
+                      ? 'border-brand-200 bg-brand-50'
+                      : 'border-[#E4E7EC] bg-white'
                   }`}
                 >
                   <ChainIcon chain="eth" />

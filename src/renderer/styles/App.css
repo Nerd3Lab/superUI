@@ -46,3 +46,7 @@ background-color: #A3011F;
 background-color: #F5F5F5 ;
 
 }
+
+.max-full-screen{
+  max-height: calc(100vh - 230px);
+}

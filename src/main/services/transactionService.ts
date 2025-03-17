@@ -29,6 +29,7 @@ export type TransactionType = {
   contractAddress?: string | null;
   blockNumber: string;
   status: 'success' | 'reverted' | 'Failed';
+  timeStamp: number;
 };
 
 export interface TransactionChainInterface {
@@ -104,6 +105,8 @@ export class TransactionService extends ParentService {
         };
       });
 
+      const timeStamp = new Date().getTime();
+
       return {
         hash: tx.hash,
         from: tx.from,
@@ -115,6 +118,7 @@ export class TransactionService extends ParentService {
         contractAddress,
         blockNumber: receipt?.blockNumber.toString(),
         status: receipt?.status ? receipt?.status : 'Failed',
+        timeStamp,
       };
     } catch (error) {
       console.error('Error processing transaction:', error);

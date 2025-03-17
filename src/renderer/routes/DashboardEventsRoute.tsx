@@ -1,30 +1,23 @@
 import { Icon } from '@iconify/react';
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import {
-  getAccountsInterface,
-  getAccountsResponse,
-} from '../../main/services/accountService';
-import Pagination from '../components/utility/Pagination';
 import { useCurrentChainParams } from '../hooks/useCurrentChainParams';
-import { useChainState } from '../states/chain/reducer';
+import { useTransactionsState } from '../states/transaction/reducer';
+import { formatTimeFromTimestamp, SplitAddress } from '../utils/index';
 
 interface Props extends SimpleComponent {}
 
 const DashboardEventsRouteWrapper = styled.div``;
 
 function DashboardEventsRoute(props: Props) {
-  const navigate = useNavigate();
-  const [page, setPage] = useState(1);
-  const dispatch = useDispatch();
-  const chainState = useChainState();
-  const [selectedAccount, setSelectedAccount] =
-    useState<getAccountsInterface>();
+  const transactionState = useTransactionsState();
+  const { chainId } = useCurrentChainParams();
+  const transactionsList = transactionState.items[chainId];
 
-  const { layer, chainId } = useCurrentChainParams();
-  const [accounts, setAccounts] = useState<getAccountsResponse>([]);
+  const logsList = (transactionsList || []).flatMap(
+    ({ hash, timeStamp, logs }) =>
+      (logs || []).map((log) => ({ hash, timeStamp, name: 'No name', ...log })),
+  );
 
   return (
     <DashboardEventsRouteWrapper className="px-3">
@@ -39,44 +32,55 @@ function DashboardEventsRoute(props: Props) {
             </tr>
           </thead>
           <tbody className="overflow-scroll">
-            <tr className="border-b-1 border-gray-200">
-              <td className="text-left py-4">
-                <div className="text-gray-900 text-sm font-medium">
-                  CoW Protocol: GPv2Settlement
-                </div>
-                <div className="text-gray-600 text-sm">Testtesttest</div>
-              </td>
-              <td className="text-left py-4">
-                <div className="text-gray-600 text-sm">
-                  Jan-23-2025 01:54:37 PM +UTC
-                </div>
-              </td>
-              <td className="text-left py-4">
-                <div className="text-gray-600 text-sm">0x38f4...06Eb0a4</div>
-              </td>
-              <td className="text-left py-4">
-                <div className="text-gray-600 text-sm">0x38f4...06Eb0a4</div>
-              </td>
-              <td className="text-left">
-                <Link className="flex items-center" to="/dashboard/events/1">
-                  <Icon
-                    icon="prime:pencil"
-                    className="cursor-pointer text-2xl text-gray-400"
-                  />
-                </Link>
-              </td>
-            </tr>
+            {logsList.map((e) => {
+              return (
+                <tr className="border-b-1 border-gray-200">
+                  <td className="text-left py-4">
+                    <div className="text-gray-900 text-sm font-medium">
+                      {e.name}
+                    </div>
+                    {/* <div className="text-gray-600 text-sm">Testtesttest</div> */}
+                  </td>
+                  <td className="text-left py-4">
+                    <div className="text-gray-600 text-sm">
+                      {formatTimeFromTimestamp(e.timeStamp)}
+                    </div>
+                  </td>
+                  <td className="text-left py-4">
+                    <div className="text-gray-600 text-sm">
+                      {SplitAddress(e.address)}
+                    </div>
+                  </td>
+                  <td className="text-left py-4">
+                    <div className="text-gray-600 text-sm">
+                      {SplitAddress(e.hash)}
+                    </div>
+                  </td>
+                  <td className="text-left">
+                    <Link
+                      className="flex items-center"
+                      to="/dashboard/events/1"
+                    >
+                      <Icon
+                        icon="prime:pencil"
+                        className="cursor-pointer text-2xl text-gray-400"
+                      />
+                    </Link>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
 
-      <Pagination
+      {/* <Pagination
         totalPages={10}
         currentPage={page}
         onPageChange={(page) => {
           setPage(page);
         }}
-      />
+      /> */}
     </DashboardEventsRouteWrapper>
   );
 }

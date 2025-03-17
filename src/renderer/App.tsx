@@ -13,6 +13,7 @@ import ProjectChecking from './routes/ProjectChecking';
 import ProjectLoading from './routes/ProjectLoading';
 
 import 'sweetalert2/dist/sweetalert2.css';
+import DashboardContractsRoute from './routes/DashboardContractsRoute';
 import DashboardEventDetailRoute from './routes/DashboardEventDetail';
 import DashboardEventsRoute from './routes/DashboardEventsRoute';
 import DashboardLogsRoute from './routes/DashboardLogsRoute';
@@ -51,6 +52,10 @@ export default function App() {
             <Route
               path="/dashboard/:layer/:eventId"
               element={<DashboardEventDetailRoute />}
+            />
+            <Route
+              path="/dashboard/contracts/:layer/:chainId"
+              element={<DashboardContractsRoute />}
             />
           </Routes>
         </Layout>

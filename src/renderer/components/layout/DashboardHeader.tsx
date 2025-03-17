@@ -1,6 +1,6 @@
 import { Icon } from '@iconify/react';
 import { useEffect, useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { getPublicClient } from '../../../shared/utils/client';
 import { useCurrentChainParams } from '../../hooks/useCurrentChainParams';
@@ -19,7 +19,7 @@ const HeaderMenuList = [
   //   link: '/dashboard/main',
   // },
   {
-    title: 'accounts',
+    title: 'Accounts',
     icon: 'flowbite:wallet-solid',
     link: '/dashboard/accounts',
   },
@@ -31,7 +31,7 @@ const HeaderMenuList = [
   {
     title: 'Contracts',
     icon: 'ri:contract-fill',
-    link: '/dashboard',
+    link: '/dashboard/contracts',
   },
   {
     title: 'Events',

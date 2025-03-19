@@ -32,6 +32,9 @@ importers:
       extract-zip:
         specifier: ^2.0.1
         version: 2.0.1
+      path-browserify:
+        specifier: ^1.0.1
+        version: 1.0.1
       react:
         specifier: ^18.2.0
         version: 18.3.1
@@ -44,9 +47,15 @@ importers:
       react-router-dom:
         specifier: ^6.16.0
         version: 6.29.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      source-map-support:
+        specifier: ^0.5.21
+        version: 0.5.21
       styled-components:
         specifier: ^5
         version: 5.3.11(@babel/core@7.26.8)(react-dom@18.3.1(react@18.3.1))(react-is@18.3.1)(react@18.3.1)
+      sweetalert2:
+        specifier: ^11.16.0
+        version: 11.17.2
       viem:
         specifier: ^2.22.21
         version: 2.22.23(typescript@5.7.3)
@@ -229,8 +238,8 @@ importers:
         specifier: ^2.6.0
         version: 2.6.0
       tailwindcss:
-        specifier: ^4.0.0
-        version: 4.0.5
+        specifier: ^4.0.6
+        version: 4.0.14
       terser-webpack-plugin:
         specifier: ^5.3.9
         version: 5.3.11(webpack@5.97.1(webpack-cli@5.1.4))
@@ -4867,6 +4876,9 @@ packages:
   pascal-case@3.1.2:
     resolution: {integrity: sha512-uWlGT3YSnK9x3BQJaOdcZwrnV6hPpd8jFH1/ucpiLRPh/2zCVJKS19E4GvYHvaCcACn3foXZ0cLB9Wrx1KGe5g==}
 
+  path-browserify@1.0.1:
+    resolution: {integrity: sha512-b7uo2UCUOYZcnF/3ID0lulOJi/bafxa1xPe7ZPsammBSpjSWQkjNxlt635YGS2MiR9GjvuXCtz2emr3jbsz98g==}
+
   path-exists@4.0.0:
     resolution: {integrity: sha512-ak9Qy5Q7jYb2Wwcey5Fpvg2KoAc/ZIhLSLOSBmRmygPsGwkVVt0fZa0qrtMz+m6tJTAHfZQ8FnmB4MG4LWy7/w==}
     engines: {node: '>=8'}
@@ -5856,6 +5868,9 @@ packages:
     engines: {node: '>=14.0.0'}
     hasBin: true
 
+  sweetalert2@11.17.2:
+    resolution: {integrity: sha512-HKxDr1IyV3Lxr3W6sb61qm/p2epFIEdr5EKwteRFHnIg6f8nHFl2kX++DBVz16Mac+fFiU3hMpjq1L6yE2Ge5w==}
+
   symbol-tree@3.2.4:
     resolution: {integrity: sha512-9QNk5KwDF+Bvz+PyObkmSYjI5ksVUYtjW7AU22r2NKcfLJcXp96hkDWU3+XndOsUb+AQ9QhfzfCT2O+CNWT5Tw==}
 
@@ -5865,6 +5880,9 @@ packages:
 
   tailwind-merge@2.6.0:
     resolution: {integrity: sha512-P+Vu1qXfzediirmHOC3xKGAYeZtPcV9g76X+xg2FD4tYgR71ewMA35Y3sCz3zhiN/dwefRpJX0yBcgwi1fXNQA==}
+
+  tailwindcss@4.0.14:
+    resolution: {integrity: sha512-92YT2dpt671tFiHH/e1ok9D987N9fHD5VWoly1CdPD/Cd1HMglvZwP3nx2yTj2lbXDAHt8QssZkxTLCCTNL+xw==}
 
   tailwindcss@4.0.5:
     resolution: {integrity: sha512-DZZIKX3tA23LGTjHdnwlJOTxfICD1cPeykLLsYF1RQBI9QsCR3i0szohJfJDVjr6aNRAIio5WVO7FGB77fRHwg==}
@@ -12085,6 +12103,8 @@ snapshots:
       no-case: 3.0.4
       tslib: 2.8.1
 
+  path-browserify@1.0.1: {}
+
   path-exists@4.0.0: {}
 
   path-is-absolute@1.0.1: {}
@@ -13134,6 +13154,8 @@ snapshots:
       csso: 5.0.5
       picocolors: 1.1.1
 
+  sweetalert2@11.17.2: {}
+
   symbol-tree@3.2.4: {}
 
   synckit@0.9.2:
@@ -13142,6 +13164,8 @@ snapshots:
       tslib: 2.8.1
 
   tailwind-merge@2.6.0: {}
+
+  tailwindcss@4.0.14: {}
 
   tailwindcss@4.0.5: {}
 

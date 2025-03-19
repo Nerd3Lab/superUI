@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import Swal from 'sweetalert2';
 import ETHIMG from '../../../../assets/img/ETH.png';
 import AVATARIMG from '../../../../assets/img/avatar.png';
-import { TransferIcon } from '../../../../public/icons/transfer';
 import { getAccountsInterface } from '../../../main/services/accountService';
 import { useCurrentChainParams } from '../../hooks/useCurrentChainParams';
 import { useAccountsState } from '../../states/account/reducer';
@@ -199,9 +198,9 @@ function TransferModal({ account }: Props) {
           {editingAccount === 'sender' && renderAccountOptions('sender')}
         </RelativeWrapper>
         <div className="flex justify-center mt-4">
-          <div className="p-2 rounded-lg border border-brand-300">
-            <TransferIcon />
-          </div>
+          {/* <div className="p-2 rounded-lg border border-brand-300"> */}
+            <Icon icon="icon-park-solid:down-c" className="text-brand-300 text-2xl" />
+          {/* </div> */}
         </div>
         <RelativeWrapper ref={receiverWrapperRef} className="mt-2">
           <div

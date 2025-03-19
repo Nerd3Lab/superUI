@@ -230,6 +230,8 @@ export class SupersimService extends ParentService {
         }
         args.push('--interop.autorelay');
 
+        console.log('args', args);
+
         const env = {
           ...process.env,
           PATH: `${foundryBinaryPath.dir}:${process.env.PATH || ''}`,

@@ -12,8 +12,8 @@ body {
   position: relative;
   height: 100vh;
   font-family: sans-serif;
-  overflow-y: hidden;
-  overflow-x: hidden;
+  /* overflow-y: hidden; */
+  /* overflow-x: hidden; */
   width: 100vw;
 
   /* image bg */

@@ -16,7 +16,7 @@ const ContractsRouteWrapper = styled.div``;
 
 const options = [
   { value: 'hardhat', label: 'Hardhat', imgSrc: '/icons/hardhat.svg' },
-  { value: 'truffle', label: 'Truffle', imgSrc: '/icons/truffle.svg' },
+  { value: 'truffle', label: 'Truffle', imgSrc: '/icons/truffle.png' },
 ];
 
 interface Network {
@@ -52,12 +52,25 @@ function DashboardContractsRoute(props: Props) {
       const win = window as any;
       if (win.showDirectoryPicker) {
         const dirHandle = await win.showDirectoryPicker();
-        setDirectory(dirHandle.name);
+
+        // Get the full path by iterating through directory handle
+        let path = dirHandle.name;
+        let currentHandle = dirHandle;
+
+        while (await currentHandle.queryPermission({ mode: 'read' }) === 'granted') {
+          const parentHandle = await currentHandle.getParent();
+          if (!parentHandle) break;
+          path = `${parentHandle.name}/${path}`;
+          currentHandle = parentHandle;
+        }
+
+        setDirectory(path);
       } else {
         alert('Directory Picker API is not supported in this browser.');
       }
     } catch (error) {
-      console.error('Directory selection canceled');
+      console.log(error);
+      // console.error('Directory selection canceled');
     }
   };
 
@@ -83,8 +96,8 @@ function DashboardContractsRoute(props: Props) {
         <Icon icon="grommet-icons:form-previous-link" className="text-2xl" />
         <div className="text-sm font-semibold">Back to contracts list</div>
       </div>
-      <div className="flex gap-6">
-        <div className="w-3/4 overflow-scroll max-full-screen">
+      <div className="w-full">
+        <div className="overflow-scroll">
           <div className="mb-5">
             <div className="text-2xl font-semibold text-gray-900 mb-1">
               Deploy contract
@@ -93,6 +106,7 @@ function DashboardContractsRoute(props: Props) {
               Deploy your contract to Superchain with one click
             </div>
           </div>
+
           <div className="p-4 border rounded-xl bg-[#E8EBEF] border-[#18365C] flex flex-col gap-3">
             <div>
               <div className="text-gray-900 text-lg font-semibold">
@@ -125,7 +139,7 @@ function DashboardContractsRoute(props: Props) {
                     type="text"
                     value={directory || 'Select a directory...'}
                     readOnly
-                    className="flex-1 text-gray-500 truncate border border-gray-300 px-3.5 py-2.5 rounded-l-lg bg-white border-r-0"
+                    className="text-gray-500 text-sm truncate border border-gray-300 px-3.5 py-2.5 rounded-l-lg bg-white border-r-0"
                   />
                   <button
                     onClick={handleOpenDirectory}
@@ -153,7 +167,7 @@ function DashboardContractsRoute(props: Props) {
               <Radio
                 name="abiSource"
                 label="Use source from settings (Autoload ABI from project directory)"
-                description="/Users/poonpetchx/Test Deploy/ABI/"
+                description={directory ? directory : 'Please select a directory'}
                 checked={selectedRadio === 'autoload'}
                 onChange={() => setSelectedRadio('autoload')}
               />
@@ -303,7 +317,6 @@ function DashboardContractsRoute(props: Props) {
               </div>
             </div>
             <div className="w-full relative" ref={dropdownRef}>
-              {/* Account Box */}
               <div
                 className="border border-gray-300 rounded-lg py-2.5 px-3.5 cursor-pointer"
                 onClick={() => setIsOpen(!isOpen)}
@@ -408,7 +421,6 @@ function DashboardContractsRoute(props: Props) {
               </div>
             </div>
             <div className="border-2 border-[#E5012C] rounded-[20px] p-5 bg-white w-full">
-              {/* Layer 2 */}
               <div>
                 <h3 className="text-gray-700 font-semibold mb-3 text-xs">
                   Layer 2
@@ -436,7 +448,6 @@ function DashboardContractsRoute(props: Props) {
                 </div>
               </div>
               <hr className="my-3 border-gray-200" />
-              {/* Layer 1 */}
               <div>
                 <h3 className="text-gray-700 font-semibold mb-3 text-xs">
                   Layer 1
@@ -463,9 +474,9 @@ function DashboardContractsRoute(props: Props) {
             <ButtonStyled>Deploy contract</ButtonStyled>
           </div>
         </div>
-        <div className="w-1/4">
+        {/* <div className="w-1/4">
           <Stepper />
-        </div>
+        </div> */}
       </div>
     </ContractsRouteWrapper>
   );

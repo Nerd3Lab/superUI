@@ -28,16 +28,16 @@ const HeaderMenuList = [
     icon: 'icon-park-solid:transaction',
     link: '/dashboard/transactions',
   },
-  {
-    title: 'Contracts',
-    icon: 'ri:contract-fill',
-    link: '/dashboard/contracts',
-  },
-  {
-    title: 'Events',
-    icon: 'mdi:event-auto',
-    link: '/dashboard/events',
-  },
+  // {
+  //   title: 'Contracts',
+  //   icon: 'ri:contract-fill',
+  //   link: '/dashboard/contracts',
+  // },
+  // {
+  //   title: 'Events',
+  //   icon: 'mdi:event-auto',
+  //   link: '/dashboard/events',
+  // },
   {
     title: 'Logs',
     icon: 'carbon:cloud-logging',
@@ -91,7 +91,7 @@ function DashboardHeader(props: Props) {
   }, [chainId, layer]);
 
   return (
-    <DashboardHeaderWrapper className="w-full bg-white h-[8rem] flex flex-col justify-center px-6 border-b-1 border-gray-200">
+    <DashboardHeaderWrapper className="pl-[18rem] z-100 pt-2 fixed top-0 left-0 w-full bg-white h-[8rem] flex flex-col justify-center px-6 border-b-1 border-gray-200">
       <div className="flex flex-wrap w-ful gap-12">
         <div>
           <p className="text-gray-600 mb-1 text-sm">Current Block</p>

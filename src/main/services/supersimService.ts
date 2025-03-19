@@ -205,6 +205,7 @@ export class SupersimService extends ParentService {
             : '';
           args = ['fork', chainArgs, '--interop.enabled'];
         }
+        args.push('--interop.autorelay');
 
         const env = {
           ...process.env,

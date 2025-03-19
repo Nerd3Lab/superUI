@@ -11,11 +11,15 @@ import { AppUpdater } from 'electron-updater';
 import { TransactionService } from './transactionService';
 import { typeChainID } from '../../shared/constant/chain';
 
-const SUPERSIM_VERSION = '0.1.0-alpha.33'; // Update as needed
+const SUPERSIM_VERSION = '0.1.0-alpha.43'; // Update as needed
 const DOWNLOAD_BASE_URL = `https://github.com/ethereum-optimism/supersim/releases/download/${SUPERSIM_VERSION}`;
 
 let supersimProcess: ChildProcessWithoutNullStreams | null = null;
 const supersimPath = path.join(app.getPath('userData'), 'supersim');
+const binaryPath = path.join(
+  supersimPath,
+  process.platform === 'win32' ? 'supersim.exe' : 'supersim',
+);
 
 export type SupersimLog = {
   message: string;
@@ -59,6 +63,7 @@ function getDownloadUrl(): { url: string; filename: string } {
 }
 
 async function downloadSupersim(window: BrowserWindow) {
+  console.log('downloadSupersim');
   const { url, filename } = getDownloadUrl();
   const outputPath = path.join(supersimPath, filename);
 
@@ -111,6 +116,52 @@ async function downloadSupersim(window: BrowserWindow) {
   });
 }
 
+async function checkSupersim() {
+  return new Promise((resolve) => {
+    const quotedPath = `"${binaryPath}"`;
+    exec([quotedPath, '--version'].join(' '), (error, stdout, stderr) => {
+      console.log('supersim --version', stdout);
+      console.log('supersim --version', stderr);
+      if (error) {
+        resolve({
+          isSuccess: false,
+          error: error.message,
+          msg: undefined,
+        });
+      } else {
+        resolve({
+          isSuccess: true,
+          error: undefined,
+          msg: stdout,
+        });
+      }
+    });
+  });
+}
+
+async function checkFoundry() {
+  return new Promise((resolve) => {
+    exec('forge --version', (error, stdout, stderr) => {
+      console.log('stdout', stdout);
+      console.log('stderr', stderr);
+      console.log('error', error);
+      if (error) {
+        resolve({
+          isSuccess: false,
+          error: error.message,
+          msg: undefined,
+        });
+      } else {
+        resolve({
+          isSuccess: true,
+          error: undefined,
+          msg: stdout,
+        });
+      }
+    });
+  });
+}
+
 export class SupersimService extends ParentService {
   private transactionService: TransactionService;
 
@@ -126,31 +177,6 @@ export class SupersimService extends ParentService {
 
   registerEvents() {
     ipcMain.handle('start-supersim', async (_, payload: SupersimStartArgs) => {
-      // check version foundry with forge --version (async await)
-
-      const checkFoundry = async () => {
-        return new Promise((resolve) => {
-          exec('forge --version', (error, stdout, stderr) => {
-            console.log('stdout', stdout);
-            console.log('stderr', stderr);
-            console.log('error', error);
-            if (error) {
-              resolve({
-                isSuccess: false,
-                error: error.message,
-                msg: undefined,
-              });
-            } else {
-              resolve({
-                isSuccess: true,
-                error: undefined,
-                msg: stdout,
-              });
-            }
-          });
-        });
-      };
-
       const res = (await checkFoundry()) as any;
 
       if (this.isActive()) {
@@ -176,10 +202,7 @@ export class SupersimService extends ParentService {
 
       try {
         await downloadSupersim(this.window as BrowserWindow);
-        const binaryPath = path.join(
-          supersimPath,
-          process.platform === 'win32' ? 'supersim.exe' : 'supersim',
-        );
+        await checkSupersim();
 
         console.log('payload', payload);
 

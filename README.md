@@ -47,16 +47,16 @@ yarn package
 ```
 
 4. open app from /release/build
+
 - On macOs (Intel chip), **mac** folder (SuperUI)
 - On macOs (Apple chip), **mac-arm64** folder (SuperUI)
 - On Windows, **win-arm64-unpacked** folder (superui.exe)
 - On Linux, **linux-arm64-unpacked** folder (superui)
 
-
 ## Testing with us
 
-- On macOs (Apple chip), install superUI with download link [here](https://github.com/Nerd3Lab/superUI/releases/download/v1.2.0/SuperUI-1.2.0-arm64.dmg)
-- On macOs (Intel chip), install superUI with download link [here](https://github.com/Nerd3Lab/superUI/releases/download/v1.2.0/SuperUI-1.2.0.dmg)
-- On Windows, install superUI with download link [here](https://github.com/Nerd3Lab/superUI/releases/download/v1.2.0/SuperUI-1.2.0-arm64-win.zip)
-<!-- - On Linux, install superUI with download link [here](https://github.com/Nerd3Lab/superUI/releases/download/v1.1.3/SuperUI-1.1.3-arm64.AppImage) -->
+- On macOs (Apple chip), install superUI with download link [here](https://github.com/Nerd3Lab/superUI/releases/download/v1.2.1/SuperUI-1.2.1-arm64.dmg)
+- On macOs (Intel chip), install superUI with download link [here](https://github.com/Nerd3Lab/superUI/releases/download/v1.2.1/SuperUI-1.2.1.dmg)
+- On Windows x64, install superUI with download link [here](https://github.com/Nerd3Lab/superUI/releases/download/v1.2.1/SuperUI-1.2.1-win.zip)
+- On Linux x32, install superUI with download link [here](https://github.com/Nerd3Lab/superUI/releases/download/v1.2.1/SuperUI-1.2.1-ia32-win.zip)
 

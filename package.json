@@ -1,7 +1,7 @@
 {
   "name": "superui",
-  "version": "1.1.6",
-  "description": "A foundation for scalable desktop apps",
+  "version": "1.2",
+  "description": "The Ultimate Ethereum & Superchain Development Playground",
   "keywords": [
     "op-stack",
     "ethereum",
@@ -38,6 +38,8 @@
     "lint:fix": "cross-env NODE_ENV=development eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "package": "ts-node ./.erb/scripts/clean.js dist && npm run build && electron-builder build --publish never && npm run build:dll",
     "package:all": "ts-node ./.erb/scripts/clean.js dist && npm run build && electron-builder build --publish never -m -l -w && npm run build:dll",
+    "package:all:mac": "ts-node ./.erb/scripts/clean.js dist && npm run build && electron-builder build --publish never -m && npm run build:dll",
+    "package:all:win": "ts-node ./.erb/scripts/clean.js dist && npm run build && electron-builder build --publish never -w && npm run build:dll",
     "release": "ts-node ./.erb/scripts/clean.js dist && npm run build && electron-builder build -p 'onTagOrDraft' && npm run build:dll",
     "release:all": "ts-node ./.erb/scripts/clean.js dist && npm run build && electron-builder build -p 'onTagOrDraft' -m -l -w && npm run build:dll",
     "release:nobuild": "electron-builder build -p 'onTagOrDraft'",
@@ -102,8 +104,10 @@
     "@electron/notarize": "^2.3.2",
     "@react-spring/web": "^9.7.5",
     "@reduxjs/toolkit": "^2.5.1",
+    "dotenv": "^16.4.7",
     "electron-debug": "^3.2.0",
     "electron-log": "^4.4.8",
+    "electron-notarize": "^1.2.2",
     "electron-updater": "^6.1.4",
     "extract-zip": "^2.0.1",
     "path-browserify": "^1.0.1",
@@ -195,31 +199,32 @@
   },
   "build": {
     "productName": "SuperUI",
-    "appId": "org.erb.SuperUI",
+    "appId": "org.nerd3lab.superui",
     "asar": true,
     "asarUnpack": "**\\*.{node,dll}",
+    "copyright": "Copyright by Nerd3lab",
     "files": [
       "dist",
       "node_modules",
       "package.json"
     ],
+    "afterSign": ".erb/scripts/notarize.js",
     "mac": {
-      "sign": ".erb/scripts/notarize.js",
-      "notarize": false,
+      "notarize": {
+        "teamId": "F946NPWBQ7"
+      },
       "target": {
-        "target": "default",
-        "arch": [
-          "arm64",
-          "x64"
-        ]
+        "target": "dmg"
       },
       "type": "distribution",
       "hardenedRuntime": true,
       "entitlements": "assets/entitlements.mac.plist",
       "entitlementsInherit": "assets/entitlements.mac.plist",
-      "gatekeeperAssess": false
+      "gatekeeperAssess": false,
+      "category": "public.app-category.developer-tools"
     },
     "dmg": {
+      "sign": false,
       "contents": [
         {
           "x": 130,
@@ -234,9 +239,10 @@
       ]
     },
     "win": {
-      "target": [
-        "nsis"
-      ]
+      "target": "zip",
+      "certificateFile": "private/Certificates.p12",
+      "certificatePassword":"",
+      "verifyUpdateCodeSignature": false
     },
     "linux": {
       "target": [

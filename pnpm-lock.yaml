@@ -20,12 +20,18 @@ importers:
       '@reduxjs/toolkit':
         specifier: ^2.5.1
         version: 2.5.1(react-redux@9.2.0(@types/react@18.3.18)(react@18.3.1)(redux@5.0.1))(react@18.3.1)
+      dotenv:
+        specifier: ^16.4.7
+        version: 16.4.7
       electron-debug:
         specifier: ^3.2.0
         version: 3.2.0
       electron-log:
         specifier: ^4.4.8
         version: 4.4.8
+      electron-notarize:
+        specifier: ^1.2.2
+        version: 1.2.2
       electron-updater:
         specifier: ^6.1.4
         version: 6.3.9
@@ -2911,6 +2917,10 @@ packages:
   dotenv-expand@5.1.0:
     resolution: {integrity: sha512-YXQl1DSa4/PQyRfgrv6aoNjhasp/p4qs9FjJ4q4cQk+8m4r6k4ZSiEyytKG8f8W9gi8WsQtIObNmKd+tMzNTmA==}
 
+  dotenv@16.4.7:
+    resolution: {integrity: sha512-47qPchRCykZC03FhkYAhrvwU4xDBFIj1QPqaarj6mdM/hgUzfPHcpkHJOn3mJAufFeeAxAzeGsr5X0M4k6fLZQ==}
+    engines: {node: '>=12'}
+
   dotenv@9.0.2:
     resolution: {integrity: sha512-I9OvvrHp4pIARv4+x9iuewrWycX6CcZtoAu1XrzPxc5UygMJXJZYmBsynku8IkrJwgypE5DGNjDPmPRhDCptUg==}
     engines: {node: '>=10'}
@@ -2958,6 +2968,11 @@ packages:
 
   electron-log@4.4.8:
     resolution: {integrity: sha512-QQ4GvrXO+HkgqqEOYbi+DHL7hj5JM+nHi/j+qrN9zeeXVKy8ZABgbu4CnG+BBqDZ2+tbeq9tUC4DZfIWFU5AZA==}
+
+  electron-notarize@1.2.2:
+    resolution: {integrity: sha512-ZStVWYcWI7g87/PgjPJSIIhwQXOaw4/XeXU+pWqMMktSLHaGMLHdyPPN7Cmao7+Cr7fYufA16npdtMndYciHNw==}
+    engines: {node: '>= 10.0.0'}
+    deprecated: Please use @electron/notarize moving forward.  There is no API change, just a package name change
 
   electron-publish@24.13.1:
     resolution: {integrity: sha512-2ZgdEqJ8e9D17Hwp5LEq5mLQPjqU3lv/IALvgp+4W8VeNhryfGhYEQC/PgDPMrnWUp+l60Ou5SJLsu+k4mhQ8A==}
@@ -9675,6 +9690,8 @@ snapshots:
 
   dotenv-expand@5.1.0: {}
 
+  dotenv@16.4.7: {}
+
   dotenv@9.0.2: {}
 
   dunder-proto@1.0.1:
@@ -9745,6 +9762,13 @@ snapshots:
       - supports-color
 
   electron-log@4.4.8: {}
+
+  electron-notarize@1.2.2:
+    dependencies:
+      debug: 4.4.0(supports-color@5.5.0)
+      fs-extra: 9.1.0
+    transitivePeerDependencies:
+      - supports-color
 
   electron-publish@24.13.1:
     dependencies:

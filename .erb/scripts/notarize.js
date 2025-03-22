@@ -1,7 +1,7 @@
-const { notarize } = require('@electron/notarize');
-const { build } = require('../../package.json');
+require('dotenv').config();
+const { notarize } = require('electron-notarize');
 
-exports.default = async function notarizeMacos(context) {
+exports.default = async function notarizing(context) {
   const { electronPlatformName, appOutDir } = context;
   if (electronPlatformName !== 'darwin') {
     return;
@@ -14,25 +14,25 @@ exports.default = async function notarizeMacos(context) {
 
   if (
     !(
-      'APPLE_ID' in process.env &&
-      'APPLE_ID_PASS' in process.env &&
-      'APPLE_TEAM_ID' in process.env
+      'APPLETEAMID' in process.env &&
+      'APPLEID' in process.env &&
+      'APPLEIDPASS' in process.env
     )
   ) {
     console.warn(
-      'Skipping notarizing step. APPLE_ID, APPLE_ID_PASS, and APPLE_TEAM_ID env variables must be set',
+      'Skipping notarizing step. APPLETEAMID, APPLEID, and APPLEIDPASS env variables must be set',
     );
     return;
   }
 
   const appName = context.packager.appInfo.productFilename;
 
-  await notarize({
+  return await notarize({
     tool: 'notarytool',
-    appBundleId: build.appId,
+    teamId: process.env.APPLETEAMID,
+    appBundleId: 'com.yourcompany.yourAppId',
     appPath: `${appOutDir}/${appName}.app`,
-    appleId: process.env.APPLE_ID,
-    appleIdPassword: process.env.APPLE_ID_PASS,
-    teamId: process.env.APPLE_TEAM_ID,
+    appleId: process.env.APPLEID,
+    appleIdPassword: process.env.APPLEIDPASS,
   });
 };

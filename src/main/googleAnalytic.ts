@@ -5,6 +5,9 @@ dotenv.config();
 const MEASUREMENT_ID = process.env.MEASUREMENT_ID;
 const API_SECRET = process.env.API_SECRET;
 
+const isDebug =
+  process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
+
 async function getUserLocation() {
   try {
     const { data } = await axios.get('http://ip-api.com/json');
@@ -22,6 +25,10 @@ async function getUserLocation() {
 }
 
 export async function trackEvent(name: string, params = {}) {
+  console.log({ isDebug });
+  if (isDebug) {
+    return;
+  }
   const location = await getUserLocation();
   const payload = {
     client_id: 'electron_app_user',

@@ -1,4 +1,4 @@
-import { BrowserWindow, ipcMain } from 'electron';
+import { BrowserWindow, dialog, ipcMain } from 'electron';
 import { AppUpdater } from 'electron-updater';
 import { ParentService } from './parentService';
 import {
@@ -7,6 +7,7 @@ import {
 } from '../../shared/utils/client';
 import { createPublicClient, Log, TransactionReceipt, webSocket } from 'viem';
 import { ChainConfigType } from '../../renderer/states/chain/reducer';
+import fs from 'fs';
 
 export interface subscribeToChainInterface {
   chain: ChainConfigType;

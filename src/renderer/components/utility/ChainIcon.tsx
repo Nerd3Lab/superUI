@@ -14,7 +14,7 @@ import TBNIMG from '../../../../assets/img/crypto/tbn.png';
 import UNICHAIN from '../../../../assets/img/crypto/unichain.png';
 import CYBERIMG from '../../../../assets/img/crypto/cyber.png';
 
-const IconsDict = {
+const IconsDict : any = {
   base: BaseIMG,
   eth: ETHIMG,
   local: LOCALIMG,
@@ -37,7 +37,7 @@ const IconsDict = {
 export type ChainListIcon = keyof typeof IconsDict;
 
 interface Props extends SimpleComponent {
-  chain: ChainListIcon;
+  chain: any;
   size?: 'md' | 'lg' | 'xl';
 }
 
@@ -46,6 +46,10 @@ const ChainIconWrapper = styled.div``;
 function ChainIcon(props: Props) {
   const classname = `${props.size === 'md' ? 'w-7 h-7' : props.size === 'lg' ? 'w-10 h-10' : props.size === 'xl' ? 'w-32 h-32' : 'w-7 h-7'}
   rounded-full flex items-center p-1 justify-center ${props.chain === 'tbn' ? 'bg-black' : 'bg-white'}`;
+
+  if (!IconsDict[props.chain]) {
+    return <></>;
+  }
   return (
     <ChainIconWrapper className={classname}>
       <img

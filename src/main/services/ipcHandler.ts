@@ -7,6 +7,7 @@ import { AppService } from './appService';
 import { AppUpdater } from 'electron-updater';
 import { TransactionService } from './transactionService';
 import { LoggingService } from './loggingService';
+import { ContractService } from './contractService';
 
 export class IpcHandler {
   private timeService: TimeService;
@@ -16,6 +17,7 @@ export class IpcHandler {
   private appService: AppService;
   private transactionService: TransactionService;
   private loggingService: LoggingService;
+  private contractService: ContractService;
 
   constructor(window: BrowserWindow, appUpdater: AppUpdater) {
     this.timeService = new TimeService(window, appUpdater);
@@ -29,5 +31,6 @@ export class IpcHandler {
     );
     this.appService = new AppService(window, appUpdater);
     this.loggingService = new LoggingService(window, appUpdater);
+    this.contractService = new ContractService(window, appUpdater);
   }
 }

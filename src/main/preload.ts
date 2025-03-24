@@ -9,6 +9,7 @@ import { SupersimStartArgs } from './services/supersimService';
 import { TransactionReceipt } from 'viem';
 import { subscribeToChainInterface } from './services/transactionService';
 import { subscribeToLogInterface } from './services/loggingService';
+import { setDirectoryResponse } from './services/contractService';
 
 export type Channels =
   | 'ipc-example'
@@ -89,6 +90,10 @@ const electronHandler = {
       ipcRenderer.invoke('subscribe-log', chain) as Promise<boolean>,
     unsubscribe: () =>
       ipcRenderer.invoke('unsubscribe-log') as Promise<boolean>,
+  },
+  contract: {
+    'setDirectory': (type: 'hardhat' | 'foundry') =>
+      ipcRenderer.invoke('set-directory', type) as Promise<setDirectoryResponse>,
   },
 };
 

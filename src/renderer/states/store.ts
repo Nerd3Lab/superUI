@@ -6,6 +6,7 @@ import { ChainSlide } from './chain/reducer';
 import { ModalSlide } from './modal/reducer';
 import { AccountsSlide } from './account/reducer';
 import { TransactionSlide } from './transaction/reducer';
+import { ContractSlide } from './contract/reducer';
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ export const store = configureStore({
     modal: ModalSlide.reducer,
     accounts: AccountsSlide.reducer,
     transaction: TransactionSlide.reducer,
+    contract: ContractSlide.reducer,
   },
 });
 

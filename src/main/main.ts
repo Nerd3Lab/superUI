@@ -18,9 +18,9 @@ import { installExtension, REDUX_DEVTOOLS } from 'electron-devtools-installer';
 import fs from 'fs';
 import os from 'node:os';
 import { IpcHandler } from './services/ipcHandler';
+import { trackEvent } from './googleAnalytic';
 
 const electronLogsPath = log.transports.file.getFile().path;
-
 
 class AppUpdater {
   private downloadProgressDialog: Electron.MessageBoxReturnValue | null = null;
@@ -84,6 +84,8 @@ class AppUpdater {
       if (mainWindow && !mainWindow.isDestroyed()) {
         mainWindow?.webContents?.send('update-downloaded-success', { info });
       }
+
+      trackEvent('app_update', { platform: process.platform });
 
       dialog
         .showMessageBox({
@@ -213,6 +215,7 @@ app.on('window-all-closed', () => {
 app
   .whenReady()
   .then(() => {
+    trackEvent('app_start', { platform: process.platform });
     createWindow();
     app.on('activate', () => {
       // On macOS it's common to re-create a window in the app when the

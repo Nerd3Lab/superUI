@@ -6,6 +6,7 @@ import {
   typeChainID,
 } from '../../../shared/constant/chain';
 import { useAppSelector } from '../hooks';
+import { revertAllRedux } from '../action';
 
 export interface ChainConfigType {
   name: string;
@@ -64,6 +65,8 @@ interface forkModePayloadInterface {
 export const ChainSlide = createSlice({
   name: 'chain',
   initialState,
+  extraReducers: (builder) =>
+    builder.addCase(revertAllRedux, () => initialState),
   reducers: {
     runQuickMode(state, { payload }) {
       state.mode = 'quick';

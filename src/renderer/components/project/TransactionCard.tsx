@@ -5,6 +5,7 @@ import { StatusBadge } from '../utility/StatusBadge';
 import { formatBalanceWei, SplitAddress } from '../../utils/index';
 import { TransactionType } from '../../../main/services/transactionService';
 import CopyText from '../utility/CopyText';
+import { useTimeFromBlockNumber } from '../../hooks/useTimeFromBlockNumber';
 
 const TransactionCardWrapper = styled.div``;
 
@@ -21,9 +22,11 @@ export const TransactionCard = ({ data }: TransactionCardProps) => {
     value,
     status,
     contractAddress,
+    blockNumber,
   } = data;
 
-  console.log(data);
+  const getTime = useTimeFromBlockNumber(blockNumber);
+
   return (
     <TransactionCardWrapper className="rounded-xl p-5 border border-gray-200">
       <div className="flex w-full justify-between mb-3">
@@ -37,7 +40,7 @@ export const TransactionCard = ({ data }: TransactionCardProps) => {
           <StatusBadge status={type} />
         </div>
       </div>
-      <div className="flex">
+      <div className="flex gap-2">
         <TransactionCardItem
           title="FROM ADDRESS"
           value={SplitAddress(from)}
@@ -82,6 +85,8 @@ export const TransactionCard = ({ data }: TransactionCardProps) => {
             </div>
           }
         />
+
+        <TransactionCardItem title="Time" value={<span className='text-xs'>{getTime.format}</span>} />
         <TransactionCardItem
           title="VALUE"
           value={`${formatBalanceWei(value, 0)} ETH`}

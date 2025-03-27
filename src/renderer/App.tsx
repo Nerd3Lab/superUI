@@ -60,7 +60,7 @@ export default function App() {
               element={<DashboardContractRoute />}
             />
             <Route
-              path="/dashboard/contracts/deploy/:layer/:chainId"
+              path="/dashboard/contracts/:layer/:chainId/deploy"
               element={<DashboardDeployContractsRoute />}
             />
           </Routes>

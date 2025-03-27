@@ -6,7 +6,7 @@ import { useCurrentChainParams } from '../../hooks/useCurrentChainParams';
 import { ChainSlide, useChainState } from '../../states/chain/reducer';
 import { useAppDispatch } from '../../states/hooks';
 import ChainIcon from '../utility/ChainIcon';
-
+import { revertAllRedux } from '../../states/action';
 interface Props extends SimpleComponent {}
 
 const DashboardSidebarWrapper = styled.div`
@@ -29,7 +29,8 @@ function DashboardSidebar(props: Props) {
 
   const exitProject = async () => {
     await window.electron.supersim.stopSupersim();
-    dispatch(ChainSlide.actions.exitMode());
+    // dispatch(ChainSlide.actions.exitMode());
+    dispatch(revertAllRedux());
     navigate('/');
   };
 
@@ -102,7 +103,10 @@ function DashboardSidebar(props: Props) {
       <div className="absolute bg-brand-50 border border-brand-500 p-4 flex items-start gap-3 bottom-0 left-0 rounded-xl m-4">
         <div className="flex">
           <div className="bg-brand-500 p-2.5 rounded-lg shadow-xs">
-            <Icon icon="solar:info-circle-outline" className="text-white text-xs" />
+            <Icon
+              icon="solar:info-circle-outline"
+              className="text-white text-xs"
+            />
           </div>
         </div>
         <div>

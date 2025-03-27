@@ -17,8 +17,10 @@ import {
   InputAbiItem,
 } from '../../main/services/contractService';
 import Swal from 'sweetalert2';
-import { useContractState } from '../states/contract/reducer';
+import { addContractItem, useContractState } from '../states/contract/reducer';
 import { useChainState } from '../states/chain/reducer';
+import { useAppDispatch } from '../states/hooks';
+import { Link } from 'react-router-dom';
 
 interface Props extends SimpleComponent {}
 
@@ -41,7 +43,9 @@ function DashboardContractsRoute(props: Props) {
   });
   const [inputValue, setInputValue] = useState<any[]>([]);
 
-  const { chainId } = useCurrentChainParams();
+  const dispatch = useAppDispatch();
+  const { chainId, layer } = useCurrentChainParams();
+  console.log({ chainId, layer });
   const contractState = useContractState();
   const chainState = useChainState();
   const chain = chainState.chainConfing[chainId];
@@ -121,6 +125,17 @@ function DashboardContractsRoute(props: Props) {
         showConfirmButton: false,
         timer: 1000,
       });
+      dispatch(
+        addContractItem({
+          chainId,
+          contract: {
+            contractAddress: res.receipt.contractAddress!,
+            name: deployValue.name,
+            abi: res.payload.abiJson.content?.abi,
+            createdAtBlockNumber: res.receipt.blockNumber.toString(),
+          },
+        }),
+      );
     } else {
       Swal.fire({
         icon: 'error',
@@ -133,10 +148,12 @@ function DashboardContractsRoute(props: Props) {
 
   return (
     <ContractsRouteWrapper className="p-3">
-      <div className="flex gap-1.5 items-center text-brand-700 mb-6 cursor-pointer">
-        <Icon icon="grommet-icons:form-previous-link" className="text-2xl" />
-        <div className="text-sm font-semibold">Back to contracts list</div>
-      </div>
+      <Link to={`/dashboard/contracts/${layer}/${chainId}`}>
+        <div className="flex gap-1.5 items-center text-brand-700 mb-6 cursor-pointer">
+          <Icon icon="grommet-icons:form-previous-link" className="text-2xl" />
+          <div className="text-sm font-semibold">Back to contracts list</div>
+        </div>
+      </Link>
       <div className="w-full">
         <div className="overflow-scroll">
           <div className="mb-5">

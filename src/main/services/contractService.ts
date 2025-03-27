@@ -72,7 +72,7 @@ export type AbiItem = {
   anonymous?: boolean;
 };
 
-type SmartContractAbi = {
+export type SmartContractAbi = {
   abi: AbiItem[];
   contractName?: string;
   bytecode: string;

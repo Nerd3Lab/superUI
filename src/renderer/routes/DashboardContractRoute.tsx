@@ -12,7 +12,7 @@ function DashboardContractRoute(props: Props) {
   return (
     <DashboardContractRouteWrapper className="pt-4">
       <div className="flex items-center justify-end">
-        <Link to={`/dashboard/contracts/deploy/${layer}/${chainId}`}>
+        <Link to={`/dashboard/contracts/${layer}/${chainId}/deploy`}>
           <ButtonStyled>Deploy contract</ButtonStyled>
         </Link>
       </div>

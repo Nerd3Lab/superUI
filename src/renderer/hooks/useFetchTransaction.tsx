@@ -5,6 +5,8 @@ import { useChainState } from '../states/chain/reducer';
 import { useAppDispatch } from '../states/hooks';
 import { TransactionChainInterface } from '../../main/services/transactionService';
 import { TransactionSlide } from '../states/transaction/reducer';
+import { addContractItem } from '../states/contract/reducer';
+import { Address } from 'viem';
 
 function useFetchTransaction() {
   const chainState = useChainState();
@@ -39,6 +41,26 @@ function useFetchTransaction() {
           transaction: transaction.transaction,
         }),
       );
+
+      if (
+        transaction.transaction.type == 'ContractCreated' &&
+        transaction.transaction.status === 'success' &&
+        transaction.transaction.contractAddress
+      ) {
+        dispatch(
+          addContractItem({
+            chainId: transaction.chain.id as typeChainID,
+            contract: {
+              contractAddress: transaction.transaction
+                .contractAddress as Address,
+              name: '',
+              abi: undefined,
+              createdAtBlockNumber:
+                transaction.transaction.blockNumber.toString(),
+            },
+          }),
+        );
+      }
     });
 
     allChainIds.forEach((chainId) => {

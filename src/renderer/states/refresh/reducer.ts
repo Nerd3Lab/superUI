@@ -1,7 +1,4 @@
-// write me basic reducer
-
 import { createSlice } from '@reduxjs/toolkit';
-
 interface RefreshState {
   counter: number;
 }

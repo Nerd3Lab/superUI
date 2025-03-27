@@ -4,14 +4,14 @@ import { createSlice } from '@reduxjs/toolkit';
 import { typeChainID } from '../../../shared/constant/chain';
 import { TransactionType } from '../../../main/services/transactionService';
 import { useAppSelector } from '../hooks';
-
+import { revertAllRedux } from '../action';
 type TransactionItem = {
   [key in typeChainID]?: TransactionType[];
 };
 
 type TransactionExist = {
   [key: string]: boolean;
-}
+};
 
 interface TransactionState {
   items: TransactionItem;
@@ -26,6 +26,8 @@ const initialState: TransactionState = {
 export const TransactionSlide = createSlice({
   name: 'transaction',
   initialState,
+  extraReducers: (builder) =>
+    builder.addCase(revertAllRedux, () => initialState),
   reducers: {
     addTransaction(
       state,
@@ -51,10 +53,11 @@ export const TransactionSlide = createSlice({
       }
 
       state.items[chainId]?.unshift(transaction);
-    }
+    },
   },
 });
 
-export const useTransactionsState = () => useAppSelector((state) => state.transaction);
+export const useTransactionsState = () =>
+  useAppSelector((state) => state.transaction);
 export const {} = TransactionSlide.actions;
 export default TransactionSlide.reducer;

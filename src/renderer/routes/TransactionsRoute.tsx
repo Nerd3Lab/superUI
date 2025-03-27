@@ -42,30 +42,30 @@ function DashboardTransactionsRoute(props: Props) {
   };
 
   return (
-    <TransactionsRouteWrapper className='flex flex-col h-full'>
+    <TransactionsRouteWrapper className="flex flex-col h-full">
       <div className="h-[3rem] mb-5 flex justify-between items-center">
         <div className="inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white shadow-sm my-3">
           <button
-            onClick={()=> handleSelect('all')}
+            onClick={() => handleSelect('all')}
             className={`px-4 py-2 text-sm font-semibold text-gray-700 rounded-l-lg cursor-pointer ${select === 'all' ? 'bg-gray-200' : ''}`}
           >
             All
           </button>
           <button
-            onClick={()=> handleSelect('Transfer')}
+            onClick={() => handleSelect('Transfer')}
             className={`px-4 py-2 text-sm font-semibold text-gray-700 border-l border-gray-300 cursor-pointer ${select === 'Transfer' ? 'bg-gray-200' : ''}`}
           >
             VALUE TRANSFER
           </button>
 
           <button
-            onClick={()=> handleSelect('ContractCall')}
+            onClick={() => handleSelect('ContractCall')}
             className={`px-4 py-2 text-sm font-semibold text-gray-700 border-l border-gray-300 cursor-pointer ${select === 'ContractCall' ? 'bg-gray-200' : ''}`}
           >
             Contract Call
           </button>
           <button
-            onClick={()=> handleSelect('ContractCreated')}
+            onClick={() => handleSelect('ContractCreated')}
             className={`px-4 py-2 text-sm font-semibold text-gray-700 rounded-r-lg border-l border-gray-300 cursor-pointer ${select === 'ContractCreated' ? 'bg-gray-200' : ''}`}
           >
             Contract Created
@@ -77,17 +77,7 @@ function DashboardTransactionsRoute(props: Props) {
       </div>
       <div className="space-y-6 overflow-y-auto h-full">
         {transactionsChainFiltered.map((transaction, index) => {
-          return (
-            <TransactionCard
-              key={transaction.hash}
-              tx={transaction.hash}
-              fromAddress={transaction.from}
-              toAddress={transaction.to}
-              gasUsed={transaction.gasUsed}
-              status={transaction.type}
-              value={transaction.value}
-            />
-          );
+          return <TransactionCard key={transaction.hash} data={transaction} />;
         })}
       </div>
     </TransactionsRouteWrapper>

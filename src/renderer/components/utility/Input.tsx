@@ -7,6 +7,7 @@ interface Props extends SimpleComponent {
   placeholder?: string;
   className?: string;
   error?: string;
+  type?: 'text' | 'number';
 }
 
 interface InputWrapperProps {
@@ -57,7 +58,7 @@ function Input(props: Props) {
       <InputWrapper hasError={!!displayError} className={props.className}>
         <input
           id="search"
-          type="text"
+          type={props.type || 'text'}
           value={search}
           onChange={handleChange}
           placeholder={props.placeholder || 'input'}

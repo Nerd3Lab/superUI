@@ -9,7 +9,9 @@ import { SupersimStartArgs } from './services/supersimService';
 import { TransactionReceipt } from 'viem';
 import { subscribeToChainInterface } from './services/transactionService';
 import { subscribeToLogInterface } from './services/loggingService';
-import { setDirectoryResponse } from './services/contractService';
+import { AbiJson, setDirectoryResponse } from './services/contractService';
+import { DeployContractParam } from '../renderer/routes/DashboardContractDeployRoute';
+import { ChainConfigType } from '../renderer/states/chain/reducer';
 
 export type Channels =
   | 'ipc-example'
@@ -92,8 +94,26 @@ const electronHandler = {
       ipcRenderer.invoke('unsubscribe-log') as Promise<boolean>,
   },
   contract: {
-    'setDirectory': (type: 'hardhat' | 'foundry') =>
-      ipcRenderer.invoke('set-directory', type) as Promise<setDirectoryResponse>,
+    setDirectory: (type: 'hardhat' | 'foundry') =>
+      ipcRenderer.invoke(
+        'set-directory',
+        type,
+      ) as Promise<setDirectoryResponse>,
+    deployContract: (payload: {
+      chain: ChainConfigType;
+      contract: DeployContractParam;
+      abiJson: AbiJson;
+    }) =>
+      ipcRenderer.invoke('deploy-contract', payload) as Promise<{
+        isSuccess: boolean;
+        receipt: TransactionReceipt;
+        payload: {
+          chain: ChainConfigType;
+          contract: DeployContractParam;
+          abiJson: AbiJson;
+        };
+        error: any;
+      }>,
   },
 };
 

@@ -3,12 +3,42 @@ import Input from '../utility/Input';
 import { Icon } from '@iconify/react';
 import Radio from '../utility/Radio';
 import { useState } from 'react';
+import { DeployContractParam } from '../../routes/DashboardContractDeployRoute';
+import { useContractState } from '../../states/contract/reducer';
+import InputArgString from './input/InputArgString';
+import InputArgBool from './input/InputArgBool';
+import InputArgInt from './input/InputArgInt';
+import InputArgAny from './input/InputArgAny';
 
-interface Props extends SimpleComponent {}
+interface Props extends SimpleComponent {
+  deployValue: DeployContractParam;
+  onChageValue: (key: string, value: any) => void;
+  onChangeInputValue: (key: number, value: any) => void;
+  inputValue: any[];
+}
 
 const ContractDeployInputWrapper = styled.div``;
 
-function ContractDeployInput(props: Props) {
+function ContractDeployInput({
+  deployValue,
+  onChageValue,
+  onChangeInputValue,
+  inputValue,
+}: Props) {
+  const contractState = useContractState();
+  const onChangeName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    onChageValue('name', e.target.value);
+  };
+
+  const selectContract = contractState.jsonFiles.find(
+    (c) => c.name === deployValue.selectContract?.value,
+  );
+
+  const abiItem = selectContract?.content?.abi.find(
+    (abi) => abi.type === 'constructor',
+  );
+  const argInputs = abiItem?.inputs || [];
+
   return (
     <ContractDeployInputWrapper>
       <hr className="my-3 border-gray-200" />
@@ -19,8 +49,8 @@ function ContractDeployInput(props: Props) {
           </div>
         </div>
         <Input
-          value=""
-          onChange={() => {}}
+          value={deployValue.name}
+          onChange={onChangeName}
           placeholder="Type your contract name"
           className="w-full"
         />
@@ -34,65 +64,46 @@ function ContractDeployInput(props: Props) {
           <div className="text-gray-600 text-sm">Set contract parameter</div>
         </div>
         <div className="flex flex-col w-full gap-3">
-          <div className="flex gap-3 items-center w-full">
-            <button className="flex w-32 text-sm justify-center items-center space-x-1 px-3 py-1 rounded-full border border-[#B9E6FE] bg-[#F0F9FF] text-[#026AA2] font-medium">
-              <Icon
-                icon="material-symbols:code"
-                className="text-lg text-[#0BA5EC]"
+          {argInputs.map((inp, index) => {
+            if (inp.type === 'string' || inp.type === 'address')
+              return (
+                <InputArgString
+                  index={index}
+                  abi={inp}
+                  onChangeInputValue={onChangeInputValue}
+                  inputValue={inputValue}
+                />
+              );
+            if (inp.type === 'bool')
+              return (
+                <InputArgBool
+                  index={index}
+                  abi={inp}
+                  onChangeInputValue={onChangeInputValue}
+                  inputValue={inputValue}
+                />
+              );
+            if (
+              (inp.type.startsWith('uint') && !inp.type.includes('[]')) ||
+              (inp.type.startsWith('int') && !inp.type.includes('[]'))
+            )
+              return (
+                <InputArgInt
+                  index={index}
+                  abi={inp}
+                  onChangeInputValue={onChangeInputValue}
+                  inputValue={inputValue}
+                />
+              );
+            return (
+              <InputArgAny
+                index={index}
+                abi={inp}
+                onChangeInputValue={onChangeInputValue}
+                inputValue={inputValue}
               />
-              <span>String</span>
-            </button>
-
-            <div className="h-full bg-gray-200 w-[1px]" />
-            <Input
-              value=""
-              onChange={() => {}}
-              placeholder="parameter"
-              className="w-full"
-            />
-          </div>
-          <div className="flex gap-3 items-center w-full">
-            <button className="flex w-32 text-sm justify-center items-center space-x-1 px-3 py-1 rounded-full border border-[#B9E6FE] bg-[#F0F9FF] text-[#026AA2] font-medium">
-              <Icon
-                icon="material-symbols:code"
-                className="text-lg text-[#0BA5EC]"
-              />
-              <span>Boolean</span>
-            </button>
-
-            <div className="h-full bg-gray-200 w-[1px]" />
-            <div className="flex gap-6 w-full">
-              <Radio
-                checked={true}
-                label="TRUE"
-                name="argumentBoolean"
-                onChange={() => {}}
-              />
-              <Radio
-                checked={false}
-                label="FALSE"
-                name="argumentBoolean"
-                onChange={() => {}}
-              />
-            </div>
-          </div>
-          <div className="flex gap-3 items-center w-full">
-            <button className="flex w-32 text-sm justify-center items-center space-x-1 px-3 py-1 rounded-full border border-[#B9E6FE] bg-[#F0F9FF] text-[#026AA2] font-medium">
-              <Icon
-                icon="material-symbols:code"
-                className="text-lg text-[#0BA5EC]"
-              />
-              <span>String</span>
-            </button>
-
-            <div className="h-full bg-gray-200 w-[1px]" />
-            <Input
-              value=""
-              onChange={() => {}}
-              placeholder="parameter"
-              className="w-full"
-            />
-          </div>
+            );
+          })}
         </div>
       </div>
     </ContractDeployInputWrapper>

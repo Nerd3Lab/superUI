@@ -41,7 +41,7 @@ export class AccountService extends ParentService {
             return {
               privateKey: account.privateKey,
               publicKey: account.publicKey,
-              balance: balance.toString(), // You might want to convert it using ethers.utils.formatEther(balance)
+              balance: balance.toString(),
               index,
             };
           }),

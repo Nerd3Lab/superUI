@@ -2,8 +2,12 @@ import styled from 'styled-components';
 import { useChainState } from '../../states/chain/reducer';
 import ChainIcon from '../utility/ChainIcon';
 import { useCurrentChainParams } from '../../hooks/useCurrentChainParams';
+import { DeployContractParam } from '../../routes/DashboardContractDeployRoute';
 
-interface Props extends SimpleComponent {}
+interface Props extends SimpleComponent {
+  deployValue: DeployContractParam;
+  onChageValue: (key: string, value: any) => void;
+}
 
 const ContractDeployChainWrapper = styled.div``;
 

@@ -7,7 +7,10 @@ interface StatusBadgeProps {
     | 'Transfer'
     | 'ContractCall'
     | 'ContractCreated'
-    | 'Unknown';
+    | 'Unknown'
+    | 'success'
+    | 'reverted'
+    | 'Failed';
   noIcon?: boolean;
 }
 export const StatusBadge = ({ status, noIcon }: StatusBadgeProps) => {
@@ -61,14 +64,14 @@ export const StatusBadge = ({ status, noIcon }: StatusBadgeProps) => {
 
   if (status === 'ContractCall') {
     return (
-      <div className="flex gap-2 rounded-full border border-[#D1FAE5] bg-[#F0FFF4] px-2 py-0.5 font-medium items-center">
+      <div className="flex gap-2 rounded-full border border-purple-200 bg-purple-50 px-2 py-0.5 font-medium items-center">
         {!noIcon && (
           <Icon
             icon="icon-park-outline:switch"
-            className="text-xs text-[#10B981]"
+            className="text-xs text-purple-900"
           />
         )}
-        <div className="text-xs min-w-[3rem] text-center text-[#065F46]">
+        <div className="text-xs min-w-[3rem] text-center text-purple-900">
           Contract Call
         </div>
       </div>
@@ -86,6 +89,54 @@ export const StatusBadge = ({ status, noIcon }: StatusBadgeProps) => {
         )}
         <div className="text-xs min-w-[3rem] text-center text-[#78350F]">
           Contract Created
+        </div>
+      </div>
+    );
+  }
+
+  if (status === 'success') {
+    return (
+      <div className="flex gap-2 rounded-full border border-[#D1FAE5] bg-[#F0FFF4] px-2 py-0.5 font-medium items-center">
+        {!noIcon && (
+          <Icon
+            icon="icon-park-outline:check"
+            className="text-xs text-[#10B981]"
+          />
+        )}
+        <div className="text-xs min-w-[3rem] text-center text-[#065F46]">
+          Success
+        </div>
+      </div>
+    );
+  }
+
+  if (status === 'reverted') {
+    return (
+      <div className="flex gap-2 rounded-full border border-[#FED7D7] bg-[#FEF2F2] px-2 py-0.5 font-medium items-center">
+        {!noIcon && (
+          <Icon
+            icon="icon-park-outline:close"
+            className="text-xs text-[#EF4444]"
+          />
+        )}
+       <div className="text-xs min-w-[3rem] text-center text-[#991B1B]">
+       Reverted
+        </div>
+      </div>
+    );
+  }
+
+  if (status === 'Failed') {
+    return (
+      <div className="flex gap-2 rounded-full border border-[#FED7D7] bg-[#FEF2F2] px-2 py-0.5 font-medium items-center">
+        {!noIcon && (
+          <Icon
+            icon="icon-park-outline:close"
+            className="text-xs text-[#EF4444]"
+          />
+        )}
+        <div className="text-xs min-w-[3rem] text-center text-[#991B1B]">
+          Failed
         </div>
       </div>
     );

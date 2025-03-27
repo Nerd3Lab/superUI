@@ -3,51 +3,67 @@ import { ReactNode } from 'react';
 import styled from 'styled-components';
 import { StatusBadge } from '../utility/StatusBadge';
 import { formatBalanceWei, SplitAddress } from '../../utils/index';
+import { TransactionType } from '../../../main/services/transactionService';
+import CopyText from '../utility/CopyText';
 
 const TransactionCardWrapper = styled.div``;
 
 interface TransactionCardProps {
-  tx: string;
-  status: 'Transfer' | 'ContractCall' | 'ContractCreated' | 'Unknown';
-  fromAddress: string;
-  toAddress: string;
-  gasUsed: string;
-  value: string;
-  key: string;
+  data: TransactionType;
 }
-export const TransactionCard = (props: TransactionCardProps) => {
+export const TransactionCard = ({ data }: TransactionCardProps) => {
   const {
-    tx,
-    fromAddress,
+    hash,
+    from,
     gasUsed,
-    status = 'Transfer',
-    toAddress,
+    type = 'Transfer',
+    to,
     value,
-    key,
-  } = props;
+    status,
+    contractAddress,
+  } = data;
+
+  console.log(data);
   return (
-    <TransactionCardWrapper
-      key={key}
-      className="rounded-xl p-5 border border-gray-200"
-    >
+    <TransactionCardWrapper className="rounded-xl p-5 border border-gray-200">
       <div className="flex w-full justify-between mb-3">
-        <div>
+        {/* <div>
           <div className="text-gray-600">TX HASH</div>
-          <div className="text-gray-700 text-sm font-semibold">{tx}</div>
-        </div>
-        <div>
+          <div className="text-gray-700 text-sm font-semibold">{hash}</div>
+        </div> */}
+        <TransactionCardItem title="TX HASH" value={hash} copy={hash} />
+        <div className="flex flex-col gap-1">
           <StatusBadge status={status} />
+          <StatusBadge status={type} />
         </div>
       </div>
       <div className="flex">
         <TransactionCardItem
           title="FROM ADDRESS"
-          value={SplitAddress(fromAddress)}
+          value={SplitAddress(from)}
+          copy={from}
         />
-        {toAddress && (
+        {to && type !== 'ContractCall' && (
           <TransactionCardItem
             title="TO ADDRESS"
-            value={toAddress ? SplitAddress(toAddress) : ''}
+            value={to ? SplitAddress(to) : ''}
+            copy={to}
+          />
+        )}
+
+        {to && type === 'ContractCall' && (
+          <TransactionCardItem
+            title="Contract"
+            value={to ? SplitAddress(to) : ''}
+            copy={to}
+          />
+        )}
+
+        {contractAddress && (
+          <TransactionCardItem
+            title="Contract"
+            value={contractAddress ? SplitAddress(contractAddress) : ''}
+            copy={contractAddress}
           />
         )}
 
@@ -78,13 +94,19 @@ export const TransactionCard = (props: TransactionCardProps) => {
 interface TransactionCardItemProps {
   title: string;
   value: ReactNode;
+  copy?: string;
 }
-const TransactionCardItem = ({ title, value }: TransactionCardItemProps) => {
+const TransactionCardItem = ({
+  title,
+  value,
+  copy = undefined,
+}: TransactionCardItemProps) => {
   return (
     <div className="w-1/4">
       <div className="text-gray-600">{title}</div>
-      <div className="text-gray-700 mt-0.5 font-semibold text-sm truncate">
+      <div className="text-gray-700 mt-0.5 font-semibold text-sm flex items-center gap-2">
         {value}
+        {copy && <CopyText value={copy} size={'text-base'} />}
       </div>
     </div>
   );

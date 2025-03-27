@@ -13,11 +13,12 @@ import ProjectChecking from './routes/ProjectChecking';
 import ProjectLoading from './routes/ProjectLoading';
 
 import 'sweetalert2/dist/sweetalert2.css';
-import DashboardContractsRoute from './routes/DashboardContractsRoute';
+import DashboardDeployContractsRoute from './routes/DashboardContractDeployRoute';
 import DashboardEventDetailRoute from './routes/DashboardEventDetail';
 import DashboardEventsRoute from './routes/DashboardEventsRoute';
 import DashboardLogsRoute from './routes/DashboardLogsRoute';
 import './styles/App.css';
+import DashboardContractRoute from './routes/DashboardContractRoute';
 
 export default function App() {
   return (
@@ -53,9 +54,14 @@ export default function App() {
               path="/dashboard/:layer/:eventId"
               element={<DashboardEventDetailRoute />}
             />
+
             <Route
               path="/dashboard/contracts/:layer/:chainId"
-              element={<DashboardContractsRoute />}
+              element={<DashboardContractRoute />}
+            />
+            <Route
+              path="/dashboard/contracts/deploy/:layer/:chainId"
+              element={<DashboardDeployContractsRoute />}
             />
           </Routes>
         </Layout>

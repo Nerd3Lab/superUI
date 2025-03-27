@@ -5,8 +5,12 @@ import { useAppDispatch } from '../../states/hooks';
 import { setDirectory, useContractState } from '../../states/contract/reducer';
 import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
+import { DeployContractParam } from '../../routes/DashboardContractDeployRoute';
 
-interface Props extends SimpleComponent {}
+interface Props extends SimpleComponent {
+  deployValue: DeployContractParam;
+  onChageValue: (key: string, value: any) => void;
+}
 
 const modeOption = [
   { value: 'hardhat', label: 'Hardhat', imgSrc: '/icons/hardhat.svg' },

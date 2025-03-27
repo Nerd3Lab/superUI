@@ -6,8 +6,9 @@ import { Icon } from '@iconify/react';
 import { useAccountsState } from '../../states/account/reducer';
 import { useCurrentChainParams } from '../../hooks/useCurrentChainParams';
 import { formatBalanceWei } from '../../utils/index';
-import { DeployContractParam } from '../../routes/DashboardContractsRoute';
+import { DeployContractParam } from '../../routes/DashboardContractDeployRoute';
 import { getAccountsInterface } from '../../../main/services/accountService';
+import { useContractState } from '../../states/contract/reducer';
 
 interface Props extends SimpleComponent {
   deployValue: DeployContractParam;
@@ -19,16 +20,26 @@ const ContractDeployAccountWrapper = styled.div``;
 function ContractDeployAccount({ deployValue, onChageValue }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const [amount, setAmount] = useState<string>('');
 
   const accounts = useAccountsState();
   const { chainId } = useCurrentChainParams();
   const currentAccountsList = accounts ? accounts[chainId] || [] : [];
+  const contractState = useContractState();
 
   const onClickAddress = (account: getAccountsInterface) => {
     onChageValue('account', account);
     setIsOpen(false);
   };
+
+  const selectContract = contractState.jsonFiles.find(
+    (c) => c.name === deployValue.selectContract?.value,
+  );
+
+  const abiItem = selectContract?.content?.abi.find(
+    (abi) => abi.type === 'constructor',
+  );
+
+  const isPayable = abiItem?.stateMutability === 'payable';
 
   return (
     <ContractDeployAccountWrapper>
@@ -113,37 +124,39 @@ function ContractDeployAccount({ deployValue, onChageValue }: Props) {
         </div>
       </div>
       <hr className="my-3 border-gray-200" />
-      <div className="flex gap-8">
-        <div className="w-64">
-          <div className="text-gray-900 text-sm font-semibold">
-            Value <span className="text-red-600">*</span>
+      {isPayable && (
+        <div className="flex gap-8">
+          <div className="w-64">
+            <div className="text-gray-900 text-sm font-semibold">
+              Value <span className="text-red-600">*</span>
+            </div>
           </div>
-        </div>
-        <div className="flex w-full">
-          <div className="w-2/4 flex gap-2 items-center border border-gray-300 border-r-0 rounded-l-xl p-3.5 py-2.5">
-            <input
-              type="number"
-              className="border-0 outline-none placeholder-gray-300 text-gray-800 flex-1"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-            />
-          </div>
-          <div className="w-2/4 p-3.5 py-2.5 border-l-0 border border-gray-300 rounded-r-xl flex items-center justify-end gap-3">
-            <div className="flex items-center gap-2">
+          <div className="flex w-full">
+            <div className="w-2/4 flex gap-2 items-center border border-gray-300 border-r-0 rounded-l-xl p-3.5 py-2.5">
+              <input
+                type="number"
+                className="border-0 outline-none placeholder-gray-300 text-gray-800 flex-1"
+                value={deployValue.value}
+                onChange={(e) => onChageValue('value', e.target.value)}
+              />
+            </div>
+            <div className="w-2/4 p-3.5 py-2.5 border-l-0 border border-gray-300 rounded-r-xl flex items-center justify-end gap-3">
+              {/* <div className="flex items-center gap-2">
               <div className="px-2 py-0.5 rounded-2xl border border-gray-200 bg-gray-50 text-gray-700 text-xs">
                 50%
               </div>
               <div className="px-2 py-0.5 rounded-2xl border border-gray-200 bg-gray-50 text-gray-700 text-xs">
                 All
               </div>
-            </div>
-            <div className="flex items-center gap-1">
-              <img src={ETHIMG} alt="ETH" className="w-5 h-5 rounded-full" />
-              <div className="text-gray-700">ETH</div>
+            </div> */}
+              <div className="flex items-center gap-1">
+                <img src={ETHIMG} alt="ETH" className="w-5 h-5 rounded-full" />
+                <div className="text-gray-700">ETH</div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
       <hr className="my-3 border-gray-200" />
     </ContractDeployAccountWrapper>
   );

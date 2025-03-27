@@ -64,7 +64,6 @@ export default function Select({
   };
 
   useEffect(() => {
-    console.log('va', value);
     setSelected(value);
   }, [value]);
 

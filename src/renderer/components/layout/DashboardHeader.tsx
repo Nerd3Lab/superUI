@@ -28,11 +28,11 @@ const HeaderMenuList = [
     icon: 'icon-park-solid:transaction',
     link: '/dashboard/transactions',
   },
-  // {
-  //   title: 'Contracts',
-  //   icon: 'ri:contract-fill',
-  //   link: '/dashboard/contracts',
-  // },
+  {
+    title: 'Contracts',
+    icon: 'ri:contract-fill',
+    link: '/dashboard/contracts',
+  },
   // {
   //   title: 'Events',
   //   icon: 'mdi:event-auto',

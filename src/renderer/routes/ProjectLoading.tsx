@@ -1,12 +1,13 @@
 import styled from 'styled-components';
 import LoadingDots from '../components/utility/LoadingDots';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { ChainSlide, useChainState } from '../states/chain/reducer';
 import { ipcRenderer } from 'electron';
 import { SupersimLog } from '../../main/services/supersimService';
 import { IDMapchain } from '../../shared/constant/chain';
 import { useAppDispatch } from '../states/hooks';
+import { Icon } from '@iconify/react';
 
 interface Props extends SimpleComponent {}
 
@@ -85,6 +86,17 @@ function ProjectLoading(props: Props) {
           <div className="max-w-full w-full break-all text-brand-400 text-center">
             {/* Creating... Opstack chain */}
             {logs[logs.length - 1] || ''}
+          </div>
+
+          <div>
+            {chainState.error && (
+              <Link
+                to="/"
+                className="text-warning-500 text-lg flex items-center gap-2"
+              >
+                <Icon icon="mdi:home" className="text-lg" /> Back to home
+              </Link>
+            )}
           </div>
         </div>
       </div>

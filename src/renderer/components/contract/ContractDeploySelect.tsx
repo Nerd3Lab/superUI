@@ -3,26 +3,55 @@ import Radio from '../utility/Radio';
 import Select, { Option } from '../utility/SelectOption';
 import { useContractState } from '../../states/contract/reducer';
 import { useAppDispatch } from '../../states/hooks';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Icon } from '@iconify/react';
+import { DeployContractParam } from '../../routes/DashboardContractDeployRoute';
+import { AbiItem, InputAbiItem } from '../../../main/services/contractService';
 
-interface Props extends SimpleComponent {}
+interface Props extends SimpleComponent {
+  deployValue: DeployContractParam;
+  onChageValue: (key: string, value: any) => void;
+  initValueInput: (inputAbiItem: InputAbiItem[]) => void;
+}
 
-function ContractDeploySelect(props: Props) {
+function ContractDeploySelect({
+  deployValue,
+  onChageValue,
+  initValueInput,
+}: Props) {
   const contractState = useContractState();
   const directory = contractState.contractDirectory;
   const dispatch = useAppDispatch();
-  const [selectedRadio, setSelectedRadio] = useState<string>('autoload');
-  const [selectContract, setSelectContract] = useState<Option>();
+  const [selectedRadio, setSelectedRadio] = useState<'autoload' | 'manual'>(
+    'autoload',
+  );
 
   const contractList = contractState.jsonFiles.map((file) => ({
     value: file.name,
     label: file.name,
   }));
 
-  const onSelectContract = (val: Option) => {
-    setSelectContract(val);
+  const getCurrentInputs = () => {
+    const selectContract = contractState.jsonFiles.find(
+      (c) => c.name === deployValue.selectContract?.value,
+    );
+
+    const abiItem = selectContract?.content?.abi.find(
+      (abi) => abi.type === 'constructor',
+    );
+    return abiItem?.inputs || [];
   };
+
+  const onSelectContract = (val: Option) => {
+    onChageValue('name', val.value);
+    onChageValue('selectContract', val);
+
+    initValueInput(getCurrentInputs());
+  };
+
+  useEffect(() => {
+    initValueInput(getCurrentInputs());
+  }, [deployValue.selectContract]);
 
   return (
     <div className="mt-4 flex gap-8">
@@ -43,7 +72,7 @@ function ContractDeploySelect(props: Props) {
           onChange={() => setSelectedRadio('autoload')}
         />
         <Select
-          value={selectContract}
+          value={deployValue.selectContract}
           options={contractList}
           label="Select Contract"
           onSelect={onSelectContract}

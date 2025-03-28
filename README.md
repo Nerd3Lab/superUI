@@ -7,14 +7,20 @@
 
 <a href="https://framerusercontent.com/images/Uwfs6ift9dP0BWm3UYVTSiFJ1Qs.png"><img src="https://framerusercontent.com/images/Uwfs6ift9dP0BWm3UYVTSiFJ1Qs.png" alt="Imgur-Magic" border="0"></a>
 
-## Introduction
+## About SuperUI
 
 🚀 The Ultimate Ethereum & Superchain Development Playground
+
+### Introduction
+SuperUI is an UI for Supersim that can simulate and run local chain or fork chain designed to make building on Superchain easier. We provide a user-friendly interface for testing, simulating, and debugging OP Stack applications. With SuperUI, you can fork networks, deploy smart contracts, and inspect chain state—all without relying solely on CLI commands. Our goal is to simplify the development process and support builders in creating seamless Superchain applications.
 
 - **Fork Any Superchain L2** Clone OP Mainnet, Base, and more for testing.
 - **Layer 2 Devnet** Deploy new chains in seconds, no RPC setup required.
 - **Pre-funded Test Accounts** Skip the faucet; start testing immediately.
 - **Developer tools built-in** Compatible
+- **Deploy Contract** Simple contract deployment on local test network.
+- **Contract Management** view and call contract functions. with abi import.
+- **Transaction History** Track all your transactions.
 
 ## Who is this for?
 
@@ -37,13 +43,12 @@ git clone https://github.com/Nerd3Lab/superUI
 ```bash
 cd superUI
 yarn install
-yarn package:all
 ```
 
 3. Build App
 
 ```bash
-yarn package
+yarn package:all
 ```
 
 4. open app from /release/build
@@ -59,4 +64,3 @@ yarn package
 - On macOs (Intel chip), install superUI with download link [here](https://github.com/Nerd3Lab/superUI/releases/download/v1.2.1/SuperUI-1.2.1.dmg)
 - On Windows x64, install superUI with download link [here](https://github.com/Nerd3Lab/superUI/releases/download/v1.2.1/SuperUI-1.2.1-win.zip)
 - On Windows x32, install superUI with download link [here](https://github.com/Nerd3Lab/superUI/releases/download/v1.2.1/SuperUI-1.2.1-ia32-win.zip)
-

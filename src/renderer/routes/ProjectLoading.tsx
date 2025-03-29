@@ -8,6 +8,9 @@ import { SupersimLog } from '../../main/services/supersimService';
 import { IDMapchain } from '../../shared/constant/chain';
 import { useAppDispatch } from '../states/hooks';
 import { Icon } from '@iconify/react';
+import { addContractItem } from '../states/contract/reducer';
+import { AbiL1, AbiPredeploy } from '../../shared/abi/index';
+import { predeployAddress } from '../../shared/constant/predeployAddress';
 
 interface Props extends SimpleComponent {}
 
@@ -53,6 +56,7 @@ function ProjectLoading(props: Props) {
         running,
         error,
         chainLogsPath,
+        contracts,
       } = message as SupersimLog;
       setLogs((prevLogs: any) => [...prevLogs, messageLog]);
       dispatch(
@@ -63,6 +67,45 @@ function ProjectLoading(props: Props) {
           chainLogsPath,
         }),
       );
+
+      if (contracts) {
+        const l1Chain = chainState.l1[0];
+        for (const contract of contracts) {
+          const toChain = chainState.chainConfing[contract.chainId];
+          const name = `${contract.name} - ${toChain?.name}`;
+          dispatch(
+            addContractItem({
+              chainId: l1Chain,
+              contract: {
+                contractAddress: contract.address,
+                name: name,
+                contractName: contract.name,
+                abi: AbiL1[contract.name] || undefined,
+                createdAtBlockNumber: undefined,
+              },
+            }),
+          );
+        }
+
+        const preDeployList = Object.entries(AbiPredeploy);
+        for (const [name, abi] of preDeployList) {
+          for (const l2Chain of chainState.l2) {
+            dispatch(
+              addContractItem({
+                chainId: l2Chain,
+                contract: {
+                  contractAddress: predeployAddress[name], // Placeholder address
+                  name: `${name} - Predeploy`,
+                  contractName: name,
+                  abi: abi as any,
+                  createdAtBlockNumber: '0',
+                  isPredeploy: true,
+                },
+              }),
+            );
+          }
+        }
+      }
     });
   }, []);
 

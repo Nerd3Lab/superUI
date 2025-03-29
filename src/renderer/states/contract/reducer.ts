@@ -13,8 +13,10 @@ export type ContractItemType = {
   contractAddress: Address;
   abi?: AbiItem[];
   bytecode?: string;
-  name?: string;
-  createdAtBlockNumber: string;
+  contractName?: string;
+  name?:string;
+  createdAtBlockNumber?: string;
+  isPredeploy?: boolean;
 };
 
 interface ContractState {

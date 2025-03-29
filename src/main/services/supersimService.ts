@@ -10,6 +10,7 @@ import { ParentService } from './parentService';
 import { AppUpdater } from 'electron-updater';
 import { TransactionService } from './transactionService';
 import { typeChainID } from '../../shared/constant/chain';
+import { Address } from 'viem';
 
 const SUPERSIM_VERSION = '0.1.0-alpha.43'; // Update as needed
 const DOWNLOAD_BASE_URL = `https://github.com/ethereum-optimism/supersim/releases/download/${SUPERSIM_VERSION}`;
@@ -29,12 +30,26 @@ export type SupersimLog = {
   chainLogsPath?: {
     [key in typeChainID]?: string;
   };
+  contracts?: ContractSupersimInfo[];
+  rpcs?: RpcSupersimInfo[];
 };
 
 export type SupersimStartArgs = {
   mode?: 'quick' | 'fork';
   name?: string;
   l2?: string[];
+};
+
+export type ContractSupersimInfo = {
+  name: string;
+  address: Address;
+  chainId: typeChainID;
+};
+
+export type RpcSupersimInfo = {
+  name: string;
+  rpc: string;
+  chainId: number;
 };
 
 // Determine the correct binary for the OS
@@ -256,6 +271,9 @@ export class SupersimService extends ParentService {
               }
             }
 
+            const contracts = this.extractContracts(dataString);
+            const rpcs = this.extractRpcs(dataString);
+
             if (this.isActive()) {
               this.window?.webContents?.send('supersim-log', {
                 message: dataString,
@@ -263,6 +281,8 @@ export class SupersimService extends ParentService {
                 running: true,
                 error: false,
                 chainLogsPath,
+                contracts,
+                rpcs,
               });
             }
           } else {
@@ -356,5 +376,46 @@ export class SupersimService extends ParentService {
         supersimProcess = null;
       }
     });
+  }
+
+  extractContracts(log: string): ContractSupersimInfo[] {
+    const contractRegex =
+      /-\s+(OptimismPortal|L1CrossDomainMessenger|L1StandardBridge):\s+([0-9a-fA-Fx]+)/g;
+    const chainIdRegex = /ChainID:\s+(\d+)/;
+    const sections = log.split(/\*\s+Name:/);
+    const contracts: ContractSupersimInfo[] = [];
+
+    for (const section of sections) {
+      const chainIdMatch = section.match(chainIdRegex);
+      if (!chainIdMatch) continue;
+      const chainId = parseInt(chainIdMatch[1], 10);
+
+      let match;
+      while ((match = contractRegex.exec(section)) !== null) {
+        contracts.push({
+          name: match[1],
+          address: match[2] as Address,
+          chainId: chainId as typeChainID,
+        });
+      }
+    }
+
+    return contracts;
+  }
+
+  extractRpcs(log: string): RpcSupersimInfo[] {
+    const rpcRegex = /Name:\s*([^\s]+).*?ChainID:\s*(\d+)\s+RPC:\s*([^\s]+)/g;
+    const rpcs: RpcSupersimInfo[] = [];
+
+    let match;
+    while ((match = rpcRegex.exec(log)) !== null) {
+      rpcs.push({
+        name: match[1],
+        chainId: parseInt(match[2], 10),
+        rpc: match[3],
+      });
+    }
+
+    return rpcs;
   }
 }

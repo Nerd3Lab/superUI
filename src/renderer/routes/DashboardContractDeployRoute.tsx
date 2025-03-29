@@ -131,6 +131,7 @@ function DashboardContractsRoute(props: Props) {
           contract: {
             contractAddress: res.receipt.contractAddress!,
             name: deployValue.name,
+            contractName: deployValue.name,
             abi: res.payload.abiJson.content?.abi,
             createdAtBlockNumber: res.receipt.blockNumber.toString(),
           },

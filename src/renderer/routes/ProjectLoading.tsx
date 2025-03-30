@@ -90,19 +90,19 @@ function ProjectLoading(props: Props) {
         const preDeployList = Object.entries(AbiPredeploy);
         for (const [name, abi] of preDeployList) {
           for (const l2Chain of chainState.l2) {
-            dispatch(
-              addContractItem({
-                chainId: l2Chain,
-                contract: {
-                  contractAddress: predeployAddress[name], // Placeholder address
-                  name: `${name} - Predeploy`,
-                  contractName: name,
-                  abi: abi as any,
-                  createdAtBlockNumber: '0',
-                  isPredeploy: true,
-                },
-              }),
-            );
+            const contract = {
+              chainId: l2Chain,
+              contract: {
+                contractAddress: predeployAddress[name], // Placeholder address
+                name: `${name} - Predeploy`,
+                contractName: name,
+                abi: abi as any,
+                createdAtBlockNumber: '0',
+                isPredeploy: true,
+              },
+            };
+            console.log({ contract });
+            dispatch(addContractItem(contract));
           }
         }
       }

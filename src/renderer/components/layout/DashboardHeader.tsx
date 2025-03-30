@@ -29,6 +29,11 @@ const HeaderMenuList = [
     link: '/dashboard/transactions',
   },
   {
+    title: 'Predeploy Contracts',
+    icon: 'ri:contract-fill',
+    link: '/dashboard/predeploy-contracts',
+  },
+  {
     title: 'Contracts',
     icon: 'ri:contract-fill',
     link: '/dashboard/contracts',
@@ -41,7 +46,7 @@ const HeaderMenuList = [
   {
     title: 'Logs',
     icon: 'carbon:cloud-logging',
-    link: '/dashboard',
+    link: '/dashboard/logs',
   },
   // {
   //   title: 'Settings',
@@ -57,13 +62,20 @@ function DashboardHeader(props: Props) {
   const { layer, chainId } = useCurrentChainParams();
   const [blockNumber, setBlockNumber] = useState('');
 
-  const onClickMenu = (title: string) => {
-    console.log(`/dashboard/${title.toLowerCase()}/${layer}/${chainId}`);
-    navigate(`/dashboard/${title.toLowerCase()}/${layer}/${chainId}`);
+  const onClickMenu = (link: string) => {
+    console.log({ link: `${link.toLowerCase()}/${layer}/${chainId}` });
+    navigate(`${link.toLowerCase()}/${layer}/${chainId}`);
   };
 
   const chainState = useChainState();
   const chain = chainState.chainConfing[chainId];
+
+  const menuItems =
+    +layer === 1
+      ? HeaderMenuList.filter((item) => item.title !== 'Predeploy Contracts')
+      : HeaderMenuList;
+
+  console.log({ layer });
 
   const getBlocknumber = async () => {
     if (!chain) return;
@@ -126,11 +138,11 @@ function DashboardHeader(props: Props) {
       </div>
 
       <div className="flex w-full mt-4 justify-start">
-        {HeaderMenuList.map((menu) => (
+        {menuItems.map((menu) => (
           <div
             key={menu.title}
-            className={`cursor-pointer flex items-center gap-2 px-3 py-2 rounded transition-all ${location.pathname.includes(menu.title.toLowerCase()) ? 'text-brand-500 bg-brand-25' : 'text-gray-700 bg-white'}`}
-            onClick={() => onClickMenu(menu.title)}
+            className={`cursor-pointer flex items-center gap-2 px-3 py-2 rounded transition-all ${location.pathname.includes(menu.link.toLowerCase()) ? 'text-brand-500 bg-brand-25' : 'text-gray-700 bg-white'}`}
+            onClick={() => onClickMenu(menu.link)}
           >
             <Icon icon={menu.icon} />
             <p className="text-base font-semibold">{menu.title}</p>

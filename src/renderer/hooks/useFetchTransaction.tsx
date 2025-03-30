@@ -57,6 +57,7 @@ function useFetchTransaction() {
               abi: undefined,
               createdAtBlockNumber:
                 transaction.transaction.blockNumber.toString(),
+              deployer: transaction.transaction.from as Address,
             },
           }),
         );

@@ -16,9 +16,10 @@ const CopyTextWrapper = styled.div`
 `;
 
 function CopyText(props: Props) {
-  const classNameString = props.size ? props.size : 'text-2xl';
+  const classNameString = props.size ? props.size : 'text-xl';
 
-  const copyText = async () => {
+  const copyText = async (e: any) => {
+    e.stopPropagation();
     try {
       await navigator.clipboard.writeText(props.value);
       Swal.fire({

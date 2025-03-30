@@ -19,6 +19,7 @@ import DashboardEventsRoute from './routes/DashboardEventsRoute';
 import DashboardLogsRoute from './routes/DashboardLogsRoute';
 import './styles/App.css';
 import DashboardContractRoute from './routes/DashboardContractRoute';
+import DashboardContractDetailRoute from './routes/DashboardContractDetailRoute';
 
 export default function App() {
   return (
@@ -31,7 +32,6 @@ export default function App() {
             <Route path="/project" element={<ProjectRoute />} />
             <Route path="/create" element={<ProjectCreate />} />
             <Route path="/loading" element={<ProjectLoading />} />
-
             {/* dashboard */}
             <Route path="/dashboard/main" element={<DashboardMain />} />
             <Route
@@ -43,16 +43,8 @@ export default function App() {
               element={<DashboardTransactionsRoute />}
             />
             <Route
-              path="/dashboard/events/:layer/:chainId"
-              element={<DashboardEventsRoute />}
-            />
-            <Route
               path="/dashboard/logs/:layer/:chainId"
               element={<DashboardLogsRoute />}
-            />
-            <Route
-              path="/dashboard/:layer/:eventId"
-              element={<DashboardEventDetailRoute />}
             />
 
             <Route
@@ -60,8 +52,17 @@ export default function App() {
               element={<DashboardContractRoute />}
             />
             <Route
+              path="/dashboard/predeploy-contracts/:layer/:chainId"
+              element={<DashboardContractRoute isPredeploy={true} />}
+            />
+            <Route
               path="/dashboard/contracts/:layer/:chainId/deploy"
               element={<DashboardDeployContractsRoute />}
+            />
+
+            <Route
+              path="/dashboard/contracts/:layer/:chainId/:contractAddress"
+              element={<DashboardContractDetailRoute />}
             />
           </Routes>
         </Layout>

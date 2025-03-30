@@ -6,18 +6,24 @@ import { useAppDispatch } from '../../states/hooks';
 import { useEffect, useState } from 'react';
 import { Icon } from '@iconify/react';
 import { DeployContractParam } from '../../routes/DashboardContractDeployRoute';
-import { AbiItem, InputAbiItem } from '../../../main/services/contractService';
+import {
+  AbiItem,
+  AbiJson,
+  InputAbiItem,
+} from '../../../main/services/contractService';
 
 interface Props extends SimpleComponent {
   deployValue: DeployContractParam;
   onChageValue: (key: string, value: any) => void;
   initValueInput: (inputAbiItem: InputAbiItem[]) => void;
+  currentABI?: AbiJson;
 }
 
 function ContractDeploySelect({
   deployValue,
   onChageValue,
   initValueInput,
+  currentABI,
 }: Props) {
   const contractState = useContractState();
   const directory = contractState.contractDirectory;
@@ -116,6 +122,11 @@ function ContractDeploySelect({
               </div>
             </div>
           </div>
+          {currentABI?.isValid === false && (
+            <div className="text-red-500 text-sm h-8 flex items-center w-full mt-2">
+              ** Invalid ABI file or bytecode **
+            </div>
+          )}
         </div>
       </div>
     </div>

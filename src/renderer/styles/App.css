@@ -27,6 +27,19 @@ body {
   -webkit-app-region: no-drag;
 }
 
+html,
+body {
+  font-size: 90%;
+}
+
+/* resposive */
+@media (max-width: 1200px) {
+  html,
+  body {
+    font-size: 90%;
+  }
+}
+
 * {
   -webkit-app-region: no-drag; /* Allow hover interactions */
 }

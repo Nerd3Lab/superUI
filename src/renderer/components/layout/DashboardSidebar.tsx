@@ -71,7 +71,7 @@ function DashboardSidebar(props: Props) {
         <div className="flex flex-col gap-2">
           {l2ChainList.map((item) => (
             <div
-              onClick={() => navigate(`/dashboard/accounts/1/${item?.id}`)}
+              onClick={() => navigate(`/dashboard/accounts/2/${item?.id}`)}
               key={item?.id}
               className={`flex items-center gap-2 rounded-xl px-3 py-2 cursor-pointer item-sidebar
                 ${chainId === item?.id ? 'bg-brand-700 text-white' : 'bg-white text-gray-700'}`}
@@ -83,13 +83,13 @@ function DashboardSidebar(props: Props) {
         </div>
       </div>
 
-      {/* layer 2 */}
+      {/* layer 1 */}
       <div className="flex flex-col gap-2 mt-4">
         <p className="text-sm font-semibold text-gray-500">Layer 1</p>
         <div className="flex flex-col gap-2">
           {l1ChainList.map((item) => (
             <div
-              onClick={() => navigate(`/dashboard/accounts/2/${item?.id}`)}
+              onClick={() => navigate(`/dashboard/accounts/1/${item?.id}`)}
               key={item?.id}
               className={`flex items-center gap-2 rounded-xl px-3 py-2 cursor-pointer item-sidebar
                 ${chainId === item?.id ? 'bg-brand-700 text-white' : 'bg-white text-gray-700'}`}

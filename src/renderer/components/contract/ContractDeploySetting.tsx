@@ -2,7 +2,11 @@ import styled from 'styled-components';
 import ButtonStyled from '../utility/ButtonStyled';
 import Select, { Option } from '../utility/SelectOption';
 import { useAppDispatch } from '../../states/hooks';
-import { setDirectory, useContractState } from '../../states/contract/reducer';
+import {
+  setContractMode,
+  setDirectory,
+  useContractState,
+} from '../../states/contract/reducer';
 import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import { DeployContractParam } from '../../routes/DashboardContractDeployRoute';
@@ -10,15 +14,15 @@ import { DeployContractParam } from '../../routes/DashboardContractDeployRoute';
 interface Props extends SimpleComponent {
   deployValue: DeployContractParam;
   onChageValue: (key: string, value: any) => void;
+  setInitialValue: () => void;
 }
 
 const modeOption = [
   { value: 'hardhat', label: 'Hardhat', imgSrc: '/icons/hardhat.svg' },
-  { value: 'truffle', label: 'Truffle', imgSrc: '/icons/truffle.png' },
+  { value: 'foundry', label: 'Foundry', imgSrc: '/icons/foundry.png' },
 ];
 
-function ContractDeploySetting(props: Props) {
-  const [mode, setMode] = useState<Option>();
+function ContractDeploySetting({ setInitialValue }: Props) {
   const contractState = useContractState();
   const directory = contractState.contractDirectory;
   const dispatch = useAppDispatch();
@@ -28,13 +32,24 @@ function ContractDeploySetting(props: Props) {
     label: string;
     imgSrc?: string;
   }) => {
-    setMode(option);
+    dispatch(setContractMode(option.value as any));
+    setInitialValue();
   };
 
   const handleOpenDirectory = async () => {
-    const res = await window.electron.contract.setDirectory('hardhat');
+    if (!contractState.mode) {
+      Swal.fire({
+        icon: 'info',
+        title: `Select mode`,
+        text: `Please select mode Hardhat or Foundry`,
+        showConfirmButton: true,
+      });
+      return;
+    }
+    const res = await window.electron.contract.setDirectory(contractState.mode);
     if (res.isSuccess && res.contractDirectory && res.jsonFiles) {
       dispatch(setDirectory(res));
+      setInitialValue();
     } else {
       Swal.fire({
         icon: 'error',
@@ -45,13 +60,9 @@ function ContractDeploySetting(props: Props) {
     }
   };
 
-  useEffect(() => {
-    setMode(
-      modeOption.find((e) => {
-        return e.value === contractState.type;
-      }),
-    );
-  }, [contractState.type]);
+  const mode = modeOption.find((e) => {
+    return e.value === contractState.mode;
+  });
 
   return (
     <div className="p-4 border rounded-xl bg-[#E8EBEF] border-[#18365C] flex flex-col gap-3">
@@ -75,6 +86,8 @@ function ContractDeploySetting(props: Props) {
             value={mode}
             options={modeOption}
             onSelect={handleSelection}
+            placeholder="Select Mode"
+            required
           />
         </div>
       </div>

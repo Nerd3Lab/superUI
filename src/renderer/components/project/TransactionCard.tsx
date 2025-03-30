@@ -6,6 +6,9 @@ import { formatBalanceWei, SplitAddress } from '../../utils/index';
 import { TransactionType } from '../../../main/services/transactionService';
 import CopyText from '../utility/CopyText';
 import { useTimeFromBlockNumber } from '../../hooks/useTimeFromBlockNumber';
+import { useContractState } from '../../states/contract/reducer';
+import { useCurrentChainParams } from '../../hooks/useCurrentChainParams';
+import { useChainState } from '../../states/chain/reducer';
 
 const TransactionCardWrapper = styled.div``;
 
@@ -25,7 +28,29 @@ export const TransactionCard = ({ data }: TransactionCardProps) => {
     blockNumber,
   } = data;
 
-  const getTime = useTimeFromBlockNumber(blockNumber);
+  const { chainId, layer } = useCurrentChainParams();
+  const contractState = useContractState();
+  const chainState = useChainState();
+  const chain = chainState.chainConfing[chainId];
+  const getTime = useTimeFromBlockNumber(chain, blockNumber);
+
+  const getContract = () => {
+    if (type === 'ContractCall') {
+      return contractState.items[chainId]?.find(
+        (contract) => contract.contractAddress === to,
+      );
+    }
+
+    if (contractAddress) {
+      return contractState.items[chainId]?.find(
+        (contract) => contract.contractAddress === contractAddress,
+      );
+    }
+  };
+
+  const contract = getContract();
+
+  console.log({ contract });
 
   return (
     <TransactionCardWrapper className="rounded-xl p-5 border border-gray-200">
@@ -57,7 +82,12 @@ export const TransactionCard = ({ data }: TransactionCardProps) => {
         {to && type === 'ContractCall' && (
           <TransactionCardItem
             title="Contract"
-            value={to ? SplitAddress(to) : ''}
+            value={
+              <div>
+                {contract?.name && <p className='text-emerald-600'>{contract?.contractName}</p>}
+                {to ? SplitAddress(to) : ''}
+              </div>
+            }
             copy={to}
           />
         )}
@@ -65,7 +95,12 @@ export const TransactionCard = ({ data }: TransactionCardProps) => {
         {contractAddress && (
           <TransactionCardItem
             title="Contract"
-            value={contractAddress ? SplitAddress(contractAddress) : ''}
+            value={
+              <div>
+                {contract?.name && <p className='text-emerald-600'>{contract?.name}</p>}
+                {contractAddress ? SplitAddress(contractAddress) : ''}
+              </div>
+            }
             copy={contractAddress}
           />
         )}
@@ -86,7 +121,10 @@ export const TransactionCard = ({ data }: TransactionCardProps) => {
           }
         />
 
-        <TransactionCardItem title="Time" value={<span className='text-xs'>{getTime.format}</span>} />
+        <TransactionCardItem
+          title="Time"
+          value={<span className="text-xs">{getTime.format}</span>}
+        />
         <TransactionCardItem
           title="VALUE"
           value={`${formatBalanceWei(value, 0)} ETH`}

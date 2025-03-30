@@ -4,12 +4,13 @@ import ModalSlide from './modal/reducer';
 import AccountsSlide from './account/reducer';
 import TransactionSlide from './transaction/reducer';
 import ContractSlide from './contract/reducer';
+import RefreshSlide from './refresh/reducer';
 
 export const store = configureStore({
   reducer: {
     // modal: ModalReducer,
     // layout: LayoutReducer,
-    // refresh: RefreshSlide.reducer,
+    refresh: RefreshSlide,
     chain: ChainSlide,
     modal: ModalSlide,
     accounts: AccountsSlide,

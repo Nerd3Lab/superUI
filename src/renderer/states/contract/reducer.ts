@@ -14,13 +14,14 @@ export type ContractItemType = {
   abi?: AbiItem[];
   bytecode?: string;
   contractName?: string;
-  name?:string;
+  name?: string;
   createdAtBlockNumber?: string;
   isPredeploy?: boolean;
+  deployer?: Address;
 };
 
 interface ContractState {
-  type: 'hardhat' | 'foundry';
+  mode?: 'hardhat' | 'foundry';
   contractDirectory: string;
   jsonFiles: AbiJson[];
   items: {
@@ -29,7 +30,7 @@ interface ContractState {
 }
 
 const initialState: ContractState = {
-  type: 'hardhat',
+  mode: undefined,
   contractDirectory: '',
   jsonFiles: [],
   items: {},
@@ -45,11 +46,11 @@ export const ContractSlide = createSlice({
       state.contractDirectory = payload.contractDirectory;
       state.jsonFiles = payload.jsonFiles;
     },
-    setContractType: (
+    setContractMode: (
       state,
       { payload }: { payload: 'hardhat' | 'foundry' },
     ) => {
-      state.type = payload;
+      state.mode = payload;
     },
     addContractItem: (
       state,
@@ -68,17 +69,32 @@ export const ContractSlide = createSlice({
         state.items[chainId] = [];
       }
 
-      const exists = state.items[chainId]?.some(
-        (item) => item.contractAddress === contract.contractAddress,
+      const findContract = state.items[chainId].find(
+        (c) => c.contractAddress === contract.contractAddress,
       );
-
-      if (!exists) {
-        state.items[chainId]?.push(contract);
+      if (!findContract) {
+        state.items[chainId]?.unshift({
+          ...contract,
+        });
+      } else {
+        if (contract.name) {
+          findContract.name = contract.name;
+        }
+        if (contract.contractName) {
+          findContract.contractName = contract.contractName;
+        }
+        if (contract.abi) {
+          findContract.abi = contract.abi;
+        }
+        if (contract.createdAtBlockNumber) {
+          findContract.createdAtBlockNumber = contract.createdAtBlockNumber;
+        }
       }
     },
   },
 });
 
-export const { setDirectory, addContractItem } = ContractSlide.actions;
+export const { setDirectory, addContractItem, setContractMode } =
+  ContractSlide.actions;
 export default ContractSlide.reducer;
 export const useContractState = () => useAppSelector((state) => state.contract);

@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react';
 import { getPublicClient } from '../../shared/utils/client';
-import { useChainState } from '../states/chain/reducer';
+import { ChainConfigType, useChainState } from '../states/chain/reducer';
 import { useCurrentChainParams } from './useCurrentChainParams';
 
-export const useTimeFromBlockNumber = (blockNumber: string) => {
-  const { chainId, layer } = useCurrentChainParams();
-  const chainState = useChainState();
-
-  const chain = chainState.chainConfing[chainId];
+export const useTimeFromBlockNumber = (
+  chain?: ChainConfigType,
+  blockNumber?: string,
+) => {
   const publicClient = chain ? getPublicClient(chain) : undefined;
   const [result, setResult] = useState<{
     timestamp: bigint | undefined;
@@ -19,6 +18,7 @@ export const useTimeFromBlockNumber = (blockNumber: string) => {
 
   const setTime = async () => {
     if (!publicClient) return;
+    if (!blockNumber) return;
     try {
       const time = await publicClient.getBlock({
         blockNumber: BigInt(blockNumber),
@@ -40,7 +40,7 @@ export const useTimeFromBlockNumber = (blockNumber: string) => {
     } else {
       setTime();
     }
-  }, [chain, blockNumber, setTime]);
+  }, [chain, blockNumber]);
 
   return result;
 };

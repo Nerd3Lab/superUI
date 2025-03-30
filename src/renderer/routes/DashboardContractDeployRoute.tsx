@@ -20,7 +20,7 @@ import Swal from 'sweetalert2';
 import { addContractItem, useContractState } from '../states/contract/reducer';
 import { useChainState } from '../states/chain/reducer';
 import { useAppDispatch } from '../states/hooks';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 interface Props extends SimpleComponent {}
 
@@ -45,13 +45,23 @@ function DashboardContractsRoute(props: Props) {
 
   const dispatch = useAppDispatch();
   const { chainId, layer } = useCurrentChainParams();
-  console.log({ chainId, layer });
+  // console.log({ chainId, layer });
   const contractState = useContractState();
   const chainState = useChainState();
   const chain = chainState.chainConfing[chainId];
   const accounts = useAccountsState();
   const firstAccount = accounts ? accounts[chainId]?.[0] : undefined;
+  const navigate = useNavigate();
 
+  const setInitialValue = () => {
+    setDeployValue({
+      selectContract: undefined,
+      name: '',
+      value: '0',
+      account: undefined,
+    });
+    setInputValue([]);
+  };
   const onChageValue = (key: string, value: any) => {
     setDeployValue((prev) => {
       return {
@@ -85,9 +95,19 @@ function DashboardContractsRoute(props: Props) {
     return selectContract;
   };
 
-  const confirmDeploy = async () => {
-    if (!getCurrentABI() || !chain || !deployValue.account) return;
+  const currentABI = getCurrentABI();
 
+  const confirmDeploy = async () => {
+    if (!currentABI || !chain || !deployValue.account) return;
+
+    if (!currentABI.isValid) {
+      Swal.fire({
+        icon: 'info',
+        title: 'Invalid ABI file or bytecode',
+        showConfirmButton: true,
+      });
+      return;
+    }
     const swal = await Swal.fire({
       title: 'Are you sure?',
       text: 'You want to deploy this contract?',
@@ -109,7 +129,7 @@ function DashboardContractsRoute(props: Props) {
 
     const res = await window.electron.contract.deployContract({
       chain,
-      abiJson: getCurrentABI() as AbiJson,
+      abiJson: currentABI,
       contract: {
         ...deployValue,
         inputValue,
@@ -125,17 +145,22 @@ function DashboardContractsRoute(props: Props) {
         showConfirmButton: false,
         timer: 1000,
       });
+      const contract = {
+        contractAddress: res.receipt.contractAddress!,
+        name: deployValue.name,
+        contractName: deployValue.name,
+        abi: res.payload.abiJson.content?.abi,
+        createdAtBlockNumber: res.receipt.blockNumber.toString(),
+      };
+      console.log({ contract });
       dispatch(
         addContractItem({
           chainId,
-          contract: {
-            contractAddress: res.receipt.contractAddress!,
-            name: deployValue.name,
-            contractName: deployValue.name,
-            abi: res.payload.abiJson.content?.abi,
-            createdAtBlockNumber: res.receipt.blockNumber.toString(),
-          },
+          contract,
         }),
+      );
+      navigate(
+        `/dashboard/contracts/${layer}/${chainId}/${res.receipt.contractAddress!}`,
       );
     } else {
       Swal.fire({
@@ -169,11 +194,13 @@ function DashboardContractsRoute(props: Props) {
           <ContractDeploySetting
             deployValue={deployValue}
             onChageValue={onChageValue}
+            setInitialValue={setInitialValue}
           />
           <ContractDeploySelect
             deployValue={deployValue}
             onChageValue={onChageValue}
             initValueInput={initValueInput}
+            currentABI={currentABI}
           />
           <ContractDeployInput
             deployValue={deployValue}

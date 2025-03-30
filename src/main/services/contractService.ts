@@ -104,7 +104,7 @@ export class ContractService extends ParentService {
 
         this.contractDirectory = result.filePaths[0];
         this.jsonFiles = [];
-        this.getAbiHardhat();
+        this.getAbi(type);
 
         return {
           isSuccess: true,
@@ -182,7 +182,7 @@ export class ContractService extends ParentService {
     );
   }
 
-  getAbiHardhat() {
+  getAbi(type: 'hardhat' | 'foundry') {
     const folders = fs.readdirSync(this.contractDirectory);
     for (const folder of folders) {
       const folderPath = path.join(this.contractDirectory, folder);
@@ -197,7 +197,14 @@ export class ContractService extends ParentService {
             // Parse JSON to verify it's valid
             const jsonContent = JSON.parse(fileContent) as SmartContractAbi;
             // Add to result
-            const name = jsonContent?.contractName || file;
+            const name = jsonContent?.contractName || file.replace('.json', '');
+            if (type === 'foundry') {
+              const bytecode = (jsonContent.bytecode as any).object;
+              const deployedBytecode = (jsonContent.deployedBytecode as any)
+                .object;
+              jsonContent.bytecode = bytecode;
+              jsonContent.deployedBytecode = deployedBytecode;
+            }
             this.jsonFiles.push({
               name,
               path: filePath,
@@ -232,7 +239,8 @@ export class ContractService extends ParentService {
       !jsonContent ||
       typeof jsonContent !== 'object' ||
       !jsonContent.abi ||
-      !Array.isArray(jsonContent.abi)
+      !Array.isArray(jsonContent.abi) ||
+      !jsonContent.bytecode
     ) {
       return false;
     }

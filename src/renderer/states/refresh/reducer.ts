@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { useAppSelector } from '../hooks';
 interface RefreshState {
   counter: number;
 }
@@ -19,3 +20,5 @@ export const RefreshSlide = createSlice({
 
 export const { increaseRefresh } = RefreshSlide.actions;
 export default RefreshSlide.reducer;
+
+export const useRefreshState = () => useAppSelector((state) => state.refresh.counter);

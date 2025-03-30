@@ -285,7 +285,7 @@ export class SupersimService extends ParentService {
                 rpcs,
               });
             }
-          } else {
+          } else if (dataString.includes('exit status 1')) {
             if (this.isActive()) {
               this.window?.webContents?.send('supersim-log', {
                 message: `INFO ${dataString}`,

@@ -59,6 +59,7 @@ function ProjectLoading(props: Props) {
         contracts,
       } = message as SupersimLog;
       setLogs((prevLogs: any) => [...prevLogs, messageLog]);
+      // console.log(message);
       dispatch(
         ChainSlide.actions.setStatus({
           loading,

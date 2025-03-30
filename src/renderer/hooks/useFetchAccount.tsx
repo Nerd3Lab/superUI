@@ -3,10 +3,12 @@ import { typeChainID } from '../../shared/constant/chain';
 import { setAccounts } from '../states/account/reducer';
 import { useChainState } from '../states/chain/reducer';
 import { useAppDispatch } from '../states/hooks';
+import { useRefreshState } from '../states/refresh/reducer';
 
 function useFetchAccounts() {
   const chainState = useChainState();
   const dispatch = useAppDispatch();
+  const refresh = useRefreshState();
 
   const getAccounts = async (chainId: typeChainID) => {
     // Call get-accounts from main process
@@ -19,27 +21,18 @@ function useFetchAccounts() {
   const allChainIds = [...chainState.l1, ...chainState.l2];
 
   useEffect(() => {
-    let isMounted = true;
     if (allChainIds.length === 0 || !chainState.running) {
-      isMounted = false;
       return;
-    };
+    }
 
     const fetchAccounts = async () => {
-      while (isMounted) {
-        for (const chainId of allChainIds) {
-          await getAccounts(chainId);
-        }
-        await new Promise((resolve) => setTimeout(resolve, 2000));
+      for (const chainId of allChainIds) {
+        await getAccounts(chainId);
       }
     };
 
     fetchAccounts();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [allChainIds, chainState.running]);
+  }, [allChainIds, chainState.running, refresh]);
 
   return null;
 }

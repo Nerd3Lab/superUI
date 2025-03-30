@@ -99,6 +99,8 @@ const electronHandler = {
         'set-directory',
         type,
       ) as Promise<setDirectoryResponse>,
+    uploadAbi: () =>
+      ipcRenderer.invoke('upload-abi') as Promise<setDirectoryResponse>,
     deployContract: (payload: {
       chain: ChainConfigType;
       contract: DeployContractParam;

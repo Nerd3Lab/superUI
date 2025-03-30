@@ -75,7 +75,6 @@ function DashboardHeader(props: Props) {
       ? HeaderMenuList.filter((item) => item.title !== 'Predeploy Contracts')
       : HeaderMenuList;
 
-  console.log({ layer });
 
   const getBlocknumber = async () => {
     if (!chain) return;

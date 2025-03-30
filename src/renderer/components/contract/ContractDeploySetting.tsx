@@ -3,6 +3,8 @@ import ButtonStyled from '../utility/ButtonStyled';
 import Select, { Option } from '../utility/SelectOption';
 import { useAppDispatch } from '../../states/hooks';
 import {
+  resetContractDirectory,
+  resetContractFile,
   setContractMode,
   setDirectory,
   useContractState,
@@ -15,6 +17,7 @@ interface Props extends SimpleComponent {
   deployValue: DeployContractParam;
   onChageValue: (key: string, value: any) => void;
   setInitialValue: () => void;
+  setModeABI: (mode: 'autoload' | 'manual') => void;
 }
 
 const modeOption = [
@@ -22,7 +25,7 @@ const modeOption = [
   { value: 'foundry', label: 'Foundry', imgSrc: '/icons/foundry.png' },
 ];
 
-function ContractDeploySetting({ setInitialValue }: Props) {
+function ContractDeploySetting({ setInitialValue, setModeABI }: Props) {
   const contractState = useContractState();
   const directory = contractState.contractDirectory;
   const dispatch = useAppDispatch();
@@ -32,11 +35,16 @@ function ContractDeploySetting({ setInitialValue }: Props) {
     label: string;
     imgSrc?: string;
   }) => {
+    setModeABI('autoload');
     dispatch(setContractMode(option.value as any));
     setInitialValue();
+    dispatch(resetContractDirectory());
+    dispatch(resetContractFile());
   };
 
   const handleOpenDirectory = async () => {
+    setModeABI('autoload');
+    dispatch(resetContractFile());
     if (!contractState.mode) {
       Swal.fire({
         icon: 'info',

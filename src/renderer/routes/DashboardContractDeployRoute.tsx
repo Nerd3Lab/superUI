@@ -17,7 +17,11 @@ import {
   InputAbiItem,
 } from '../../main/services/contractService';
 import Swal from 'sweetalert2';
-import { addContractItem, useContractState } from '../states/contract/reducer';
+import {
+  addContractItem,
+  resetContractState,
+  useContractState,
+} from '../states/contract/reducer';
 import { useChainState } from '../states/chain/reducer';
 import { useAppDispatch } from '../states/hooks';
 import { Link, useNavigate } from 'react-router-dom';
@@ -42,6 +46,9 @@ function DashboardContractsRoute(props: Props) {
     account: undefined,
   });
   const [inputValue, setInputValue] = useState<any[]>([]);
+  const [selectedModeAbi, setSelectedModeAbi] = useState<'autoload' | 'manual'>(
+    'autoload',
+  );
 
   const dispatch = useAppDispatch();
   const { chainId, layer } = useCurrentChainParams();
@@ -58,7 +65,7 @@ function DashboardContractsRoute(props: Props) {
       selectContract: undefined,
       name: '',
       value: '0',
-      account: undefined,
+      account: deployValue.account,
     });
     setInputValue([]);
   };
@@ -79,7 +86,18 @@ function DashboardContractsRoute(props: Props) {
     });
   };
 
+  const onChangeModeABI = (mode: 'autoload' | 'manual') => {
+    setSelectedModeAbi(mode);
+    setInitialValue();
+    dispatch(resetContractState());
+  };
+
+  const setModeABI = (mode: 'autoload' | 'manual') => {
+    setSelectedModeAbi(mode);
+  };
+
   const initValueInput = (inputAbiItem: InputAbiItem[]) => {
+    console.log({ inputAbiItem });
     setInputValue(new Array(inputAbiItem.length).fill(''));
   };
 
@@ -94,6 +112,8 @@ function DashboardContractsRoute(props: Props) {
 
     return selectContract;
   };
+
+  console.log({ inputValue });
 
   const currentABI = getCurrentABI();
 
@@ -195,12 +215,16 @@ function DashboardContractsRoute(props: Props) {
             deployValue={deployValue}
             onChageValue={onChageValue}
             setInitialValue={setInitialValue}
+            setModeABI={setModeABI}
           />
           <ContractDeploySelect
             deployValue={deployValue}
             onChageValue={onChageValue}
             initValueInput={initValueInput}
             currentABI={currentABI}
+            setInitialValue={setInitialValue}
+            onChangeModeABI={onChangeModeABI}
+            selectedModeAbi={selectedModeAbi}
           />
           <ContractDeployInput
             deployValue={deployValue}

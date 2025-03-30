@@ -23,6 +23,7 @@ export type ContractItemType = {
 interface ContractState {
   mode?: 'hardhat' | 'foundry';
   contractDirectory: string;
+  contractFile?: string;
   jsonFiles: AbiJson[];
   items: {
     [key in typeChainID]?: ContractItemType[];
@@ -45,6 +46,33 @@ export const ContractSlide = createSlice({
     setDirectory: (state, { payload }) => {
       state.contractDirectory = payload.contractDirectory;
       state.jsonFiles = payload.jsonFiles;
+    },
+    setJsonFile: (
+      state,
+      {
+        payload,
+      }: {
+        payload: {
+          jsonFiles: AbiJson[];
+          contractFile: string;
+        };
+      },
+    ) => {
+      state.jsonFiles = payload.jsonFiles;
+      state.contractFile = payload.contractFile;
+    },
+    resetContractState: (state) => {
+      state.contractDirectory = '';
+      state.jsonFiles = [];
+      state.contractFile = '';
+      state.items = {};
+      state.mode = undefined;
+    },
+    resetContractDirectory: (state) => {
+      state.contractDirectory = '';
+    },
+    resetContractFile: (state) => {
+      state.contractFile = '';
     },
     setContractMode: (
       state,
@@ -94,7 +122,14 @@ export const ContractSlide = createSlice({
   },
 });
 
-export const { setDirectory, addContractItem, setContractMode } =
-  ContractSlide.actions;
+export const {
+  setDirectory,
+  addContractItem,
+  setContractMode,
+  setJsonFile,
+  resetContractState,
+  resetContractDirectory,
+  resetContractFile,
+} = ContractSlide.actions;
 export default ContractSlide.reducer;
 export const useContractState = () => useAppSelector((state) => state.contract);

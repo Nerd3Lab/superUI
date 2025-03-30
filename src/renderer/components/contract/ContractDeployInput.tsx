@@ -15,6 +15,7 @@ interface Props extends SimpleComponent {
   onChageValue: (key: string, value: any) => void;
   onChangeInputValue: (key: number, value: any) => void;
   inputValue: any[];
+  selectedModeAbi: 'autoload' | 'manual';
 }
 
 const ContractDeployInputWrapper = styled.div``;
@@ -24,15 +25,19 @@ function ContractDeployInput({
   onChageValue,
   onChangeInputValue,
   inputValue,
+  selectedModeAbi,
 }: Props) {
   const contractState = useContractState();
   const onChangeName = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChageValue('name', e.target.value);
   };
 
-  const selectContract = contractState.jsonFiles.find(
-    (c) => c.name === deployValue.selectContract?.value,
-  );
+  const selectContract =
+    selectedModeAbi === 'autoload'
+      ? contractState.jsonFiles.find(
+          (c) => c.name === deployValue.selectContract?.value,
+        )
+      : contractState.jsonFiles[0];
 
   const abiItem = selectContract?.content?.abi.find(
     (abi) => abi.type === 'constructor',

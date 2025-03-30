@@ -49,7 +49,7 @@ export type setDirectoryResponse = {
   isSuccess: boolean;
   message: string;
   jsonFiles?: AbiJson[];
-  contractDirectory: string;
+  contractDirectory?: string;
 };
 
 export type InputAbiItem = {
@@ -180,6 +180,64 @@ export class ContractService extends ParentService {
         }
       },
     );
+
+    ipcMain.handle('upload-abi', async (_) => {
+      try {
+        const result = await dialog.showOpenDialog({
+          properties: ['openFile'],
+          filters: [{ name: 'JSON', extensions: ['json'] }],
+        });
+
+        if (result.canceled) {
+          return {
+            isSuccess: false,
+            message: 'Please select an ABI JSON file',
+          };
+        }
+
+        const filePath = result.filePaths[0];
+        const fileContent = fs.readFileSync(filePath, 'utf8');
+        const jsonContent = JSON.parse(fileContent) as SmartContractAbi;
+        const name =
+          jsonContent?.contractName || path.basename(filePath, '.json');
+
+        const bytecode =
+          jsonContent.bytecode || (jsonContent.bytecode as any).object;
+
+        jsonContent.bytecode = bytecode;
+
+        const abiJson = {
+          name,
+          path: filePath,
+          content: jsonContent,
+          isValid: false,
+        };
+
+        if (abiJson.content) {
+          abiJson.isValid = this.checkJson(abiJson.content);
+        }
+
+        if (!abiJson.isValid) {
+          return {
+            isSuccess: false,
+            message: 'Invalid ABI JSON file format',
+          };
+        }
+
+        return {
+          isSuccess: true,
+          message: 'success',
+          jsonFiles: [abiJson],
+          contractDirectory: filePath,
+        };
+      } catch (error) {
+        console.error('Error uploading ABI:', error);
+        return {
+          isSuccess: false,
+          message: 'Error uploading ABI file',
+        };
+      }
+    });
   }
 
   getAbi(type: 'hardhat' | 'foundry') {

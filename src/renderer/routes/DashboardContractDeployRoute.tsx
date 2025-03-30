@@ -106,9 +106,11 @@ function DashboardContractsRoute(props: Props) {
   }, [chainId]);
 
   const getCurrentABI = () => {
-    const selectContract = contractState.jsonFiles.find(
-      (c) => c.name === deployValue.selectContract?.value,
-    );
+    const selectContract = selectedModeAbi === 'autoload'
+      ? contractState.jsonFiles.find(
+          (c) => c.name === deployValue.selectContract?.value,
+        )
+      : contractState.jsonFiles[0];
 
     return selectContract;
   };
@@ -231,6 +233,7 @@ function DashboardContractsRoute(props: Props) {
             onChageValue={onChageValue}
             inputValue={inputValue}
             onChangeInputValue={onChangeInputValue}
+            selectedModeAbi={selectedModeAbi}
           />
           <ContractDeployAccount
             deployValue={deployValue}

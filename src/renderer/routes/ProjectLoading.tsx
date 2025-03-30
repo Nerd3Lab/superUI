@@ -94,7 +94,7 @@ function ProjectLoading(props: Props) {
               chainId: l2Chain,
               contract: {
                 contractAddress: predeployAddress[name], // Placeholder address
-                name: `${name} - Predeploy`,
+                name: `${name} - ${chainState.chainConfing[l2Chain]?.name}`,
                 contractName: name,
                 abi: abi as any,
                 createdAtBlockNumber: '0',

@@ -60,7 +60,7 @@ yarn package:all
 
 ## Download
 
-- On macOs (Apple chip), install superUI with download link [here](https://github.com/Nerd3Lab/superUI/releases/download/v1.2.4/SuperUI-1.2.4-arm64.dmg)
-- On macOs (Intel chip), install superUI with download link [here](https://github.com/Nerd3Lab/superUI/releases/download/v1.2.4/SuperUI-1.2.4.dmg)
-- On Windows x64, install superUI with download link [here](https://github.com/Nerd3Lab/superUI/releases/download/v1.2.4/SuperUI-1.2.4-win.zip)
-- On Windows x32, install superUI with download link [here](https://github.com/Nerd3Lab/superUI/releases/download/v1.2.4/SuperUI-1.2.4-ia32-win.zip)
+- On macOs (Apple chip), install superUI with download link [here](https://github.com/Nerd3Lab/superUI/releases/download/v1.2.6/SuperUI-1.2.6-arm64.dmg)
+- On macOs (Intel chip), install superUI with download link [here](https://github.com/Nerd3Lab/superUI/releases/download/v1.2.6/SuperUI-1.2.6.dmg)
+- On Windows x64, install superUI with download link [here](https://github.com/Nerd3Lab/superUI/releases/download/v1.2.6/SuperUI-1.2.6-win.zip)
+- On Windows x32, install superUI with download link [here](https://github.com/Nerd3Lab/superUI/releases/download/v1.2.6/SuperUI-1.2.6-ia32-win.zip)

@@ -12,6 +12,8 @@ import {
 import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import { DeployContractParam } from '../../routes/DashboardContractDeployRoute';
+import hardhatIMG from '../../../../assets/img/hardhat.svg';
+import foundryIMG from '../../../../assets/img/foundry.png';
 
 interface Props extends SimpleComponent {
   deployValue: DeployContractParam;
@@ -21,8 +23,8 @@ interface Props extends SimpleComponent {
 }
 
 const modeOption = [
-  { value: 'hardhat', label: 'Hardhat', imgSrc: '/icons/hardhat.svg' },
-  { value: 'foundry', label: 'Foundry', imgSrc: '/icons/foundry.png' },
+  { value: 'hardhat', label: 'Hardhat', imgSrc: hardhatIMG },
+  { value: 'foundry', label: 'Foundry', imgSrc: foundryIMG },
 ];
 
 function ContractDeploySetting({ setInitialValue, setModeABI }: Props) {
@@ -102,7 +104,7 @@ function ContractDeploySetting({ setInitialValue, setModeABI }: Props) {
       <div className="flex gap-8 items-center">
         <div className="w-2/4">
           <div className="text-sm font-semibold text-gray-700">
-            Source directory
+            Source directory (select build artifact abi folder)
           </div>
         </div>
         <div className="w-2/4">

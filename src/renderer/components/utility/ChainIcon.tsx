@@ -13,6 +13,7 @@ import RaceIMG from '../../../../assets/img/crypto/race.jpg';
 import TBNIMG from '../../../../assets/img/crypto/tbn.png';
 import UNICHAIN from '../../../../assets/img/crypto/unichain.png';
 import CYBERIMG from '../../../../assets/img/crypto/cyber.png';
+import MINTIMG from '../../../../assets/img/crypto/mint.png';
 
 const IconsDict : any = {
   base: BaseIMG,
@@ -32,6 +33,7 @@ const IconsDict : any = {
   mainnet: ETHIMG,
   unichain: UNICHAIN,
   cyber: CYBERIMG,
+  mint: MINTIMG,
 };
 
 export type ChainListIcon = keyof typeof IconsDict;

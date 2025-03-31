@@ -11,6 +11,7 @@ export const AvailableForkChain = [
   'cyber',
   'metal',
   'unichain',
+  'mint',
 ];
 
 // supersim fork --chains=base,mode,op,zora,worldchain,lyra,cyber,metal --interop.enabled
@@ -31,7 +32,8 @@ export type typeChain =
   | 'OPChainB'
   | 'worldchain'
   | 'cyber'
-  | 'unichain';
+  | 'unichain'
+  | 'mint';
 
 export type typeChainID =
   | 8453
@@ -49,7 +51,8 @@ export type typeChainID =
   | 902
   | 480
   | 7560
-  | 130;
+  | 130
+  | 185;
 
 export const chainMapID: { [key in typeChain]: typeChainID } = {
   base: 8453,
@@ -68,6 +71,7 @@ export const chainMapID: { [key in typeChain]: typeChainID } = {
   worldchain: 480,
   cyber: 7560,
   unichain: 130,
+  mint: 185,
 };
 
 export const IDMapchain: { [key in typeChainID]: typeChain } = {
@@ -87,6 +91,7 @@ export const IDMapchain: { [key in typeChainID]: typeChain } = {
   480: 'worldchain',
   7560: 'cyber',
   130: 'unichain',
+  185: 'mint',
 };
 
 export const chainNameMap: any = {

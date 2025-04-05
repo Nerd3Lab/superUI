@@ -119,6 +119,30 @@ export const ContractSlide = createSlice({
         }
       }
     },
+    setABIandNameContract: (
+      state,
+      {
+        payload,
+      }: {
+        payload: {
+          chainId: typeChainID;
+          contractAddress: string;
+          name: string;
+          contractName: string;
+          abi: any[];
+        };
+      },
+    ) => {
+      const { chainId, contractAddress, name, contractName, abi } = payload;
+      const contract = state.items[chainId]?.find(
+        (c) => c.contractAddress === contractAddress,
+      );
+      if (contract) {
+        contract.name = name;
+        contract.contractName = contractName;
+        contract.abi = abi;
+      }
+    },
   },
 });
 
@@ -130,6 +154,7 @@ export const {
   resetContractState,
   resetContractDirectory,
   resetContractFile,
+  setABIandNameContract,
 } = ContractSlide.actions;
 export default ContractSlide.reducer;
 export const useContractState = () => useAppSelector((state) => state.contract);

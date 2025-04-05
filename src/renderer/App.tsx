@@ -64,6 +64,11 @@ export default function App() {
               path="/dashboard/contracts/:layer/:chainId/:contractAddress"
               element={<DashboardContractDetailRoute />}
             />
+
+            <Route
+              path="/dashboard/events/:layer/:chainId"
+              element={<DashboardEventsRoute />}
+            />
           </Routes>
         </Layout>
       </Router>

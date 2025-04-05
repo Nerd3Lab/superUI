@@ -217,7 +217,9 @@ export class SupersimService extends ParentService {
 
       try {
         await downloadSupersim(this.window as BrowserWindow);
-        await checkSupersim();
+        const checkSupersimRes = await checkSupersim();
+
+        console.log('checkSupersimRes', checkSupersimRes);
 
         console.log('payload', payload);
 

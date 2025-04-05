@@ -17,12 +17,18 @@ export type LoggingType = {
   address: `0x${string}`;
   topics: string[];
   data: `0x${string}`;
+  transactionIndex: number;
+  logIndex: number;
+  removed: boolean;
+  blockNumber: string;
+  transactionHash: `0x${string}`;
+  blockHash: `0x${string}`;
 };
 
 export type TransactionType = {
   hash: `0x${string}`;
-  from: string;
-  to: string;
+  from: `0x${string}`;
+  to?: `0x${string}` | null;
   value: string;
   gasUsed: string;
   type: 'Transfer' | 'ContractCall' | 'ContractCreated' | 'Unknown';
@@ -56,7 +62,7 @@ export class TransactionService extends ParentService {
 
         client.watchPendingTransactions({
           onTransactions: async (transactions) => {
-            console.log('New transactions:', transactions);
+            // console.log('New transactions:', transactions);
             for (const tx of transactions) {
               const processedTx = await this.processTransaction(client, tx);
               if (processedTx) {
@@ -75,14 +81,17 @@ export class TransactionService extends ParentService {
     );
   }
 
-  async processTransaction(client: getPublicClientType, txHash: `0x${string}`) {
+  async processTransaction(
+    client: getPublicClientType,
+    txHash: `0x${string}`,
+  ): Promise<TransactionType | null> {
     try {
       const tx = await client.getTransaction({ hash: txHash });
       if (!tx) return null;
 
       const receipt = await client.getTransactionReceipt({ hash: txHash });
 
-      let type = 'Unknown';
+      let type : any = 'Unknown';
       let contractAddress: string | null = null;
 
       if (!tx.to) {
@@ -94,7 +103,9 @@ export class TransactionService extends ParentService {
         type = 'ContractCall';
       }
 
-      const logsTransform = receipt?.logs.map((log) => {
+      console.log('receipt', receipt);
+
+      const logsTransform: LoggingType[] = receipt?.logs.map((log) => {
         const topics = log.topics.map((topic) => {
           return topic.toString();
         });
@@ -103,6 +114,12 @@ export class TransactionService extends ParentService {
           address: log.address,
           topics,
           data: log.data,
+          transactionIndex: log.transactionIndex,
+          logIndex: log.logIndex,
+          removed: log.removed,
+          blockNumber: log.blockNumber.toString(),
+          transactionHash: log.transactionHash,
+          blockHash: log.blockHash,
         };
       });
 

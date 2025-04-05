@@ -50,7 +50,7 @@ export const TransactionCard = ({ data }: TransactionCardProps) => {
 
   const contract = getContract();
 
-  console.log({ contract });
+  // console.log({ contract });
 
   return (
     <TransactionCardWrapper className="rounded-xl p-5 border border-gray-200">
@@ -84,7 +84,9 @@ export const TransactionCard = ({ data }: TransactionCardProps) => {
             title="Contract"
             value={
               <div>
-                {contract?.name && <p className='text-emerald-600'>{contract?.contractName}</p>}
+                {contract?.name && (
+                  <p className="text-emerald-600">{contract?.contractName}</p>
+                )}
                 {to ? SplitAddress(to) : ''}
               </div>
             }
@@ -97,7 +99,9 @@ export const TransactionCard = ({ data }: TransactionCardProps) => {
             title="Contract"
             value={
               <div>
-                {contract?.name && <p className='text-emerald-600'>{contract?.name}</p>}
+                {contract?.name && (
+                  <p className="text-emerald-600">{contract?.name}</p>
+                )}
                 {contractAddress ? SplitAddress(contractAddress) : ''}
               </div>
             }
@@ -123,7 +127,12 @@ export const TransactionCard = ({ data }: TransactionCardProps) => {
 
         <TransactionCardItem
           title="Time"
-          value={<span className="text-xs">{getTime.format}</span>}
+          value={
+            <span className="text-xs">
+              <p className="text-brand-500">Block : {blockNumber}</p>
+              {getTime.format}
+            </span>
+          }
         />
         <TransactionCardItem
           title="VALUE"

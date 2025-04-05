@@ -8,8 +8,17 @@ import CopyText from '../components/utility/CopyText';
 import { useContractState } from '../states/contract/reducer';
 import { useFetchBalance } from '../hooks/useFetchBalance';
 import { Address } from 'viem';
-import { useTransactionsState } from '../states/transaction/reducer';
+import {
+  useEventLogsByAddress,
+  useTransactionsState,
+} from '../states/transaction/reducer';
 import { TransactionCard } from '../components/project/TransactionCard';
+import EventItem from '../components/event/EventItem';
+import EventHeader from '../components/event/EventHeader';
+import Modal from '../components/utility/Modal';
+import ContractSetAbi from '../components/contract/ContractSetAbi';
+import { openModal } from '../states/modal/reducer';
+import { useAppDispatch } from '../states/hooks';
 
 interface Props extends SimpleComponent {}
 
@@ -78,16 +87,38 @@ function DashboardContractDetailRoute(props: Props) {
       t.contractAddress === contractAddress,
   );
 
+  const eventLists = useEventLogsByAddress(chainId, contractAddress as any);
+
+  const goBack = () => {
+    navigate(-1);
+  };
+
+  const dispatch = useAppDispatch();
+
+  const openContractABI = () => {
+    dispatch(openModal('contractABI'));
+  };
+
   return (
     <DashboardContractDetailRouteWrapper className="px-3 py-2">
+      <Modal modalId="contractABI">
+        <ContractSetAbi contract={contract} chainId={chainId} />
+      </Modal>
       {/* Header */}
-      <Link
-        to={`/dashboard/contracts/${layer}/${chainId}`}
-        className="flex gap-1.5 items-center text-brand-700 mb-5 cursor-pointer"
-      >
-        <Icon icon="gravity-ui:arrow-left" />
-        <div className="text-sm font-semibold">Go back</div>
-      </Link>
+      <div className="flex justify-between items-center">
+        <div
+          onClick={goBack}
+          className="flex gap-1.5 items-center text-brand-700 mb-5 cursor-pointer"
+        >
+          <Icon icon="gravity-ui:arrow-left" />
+          <div className="text-sm font-semibold">Go back</div>
+        </div>
+        <div className="flex gap-1 items-center">
+          <ButtonStyled onClick={openContractABI}>
+            Config ABI & Name
+          </ButtonStyled>
+        </div>
+      </div>
       {/* Address Section */}
       <div className="flex flex-col mb-4">
         <div className="flex gap-1 items-center">
@@ -130,11 +161,12 @@ function DashboardContractDetailRoute(props: Props) {
           isActive={selectedTab === 'transaction'}
           onClick={() => setSelectedTab('transaction')}
         />
-        {/* <Tab
+        <Tab
           label="EVENTS"
+          count={eventLists.length}
           isActive={selectedTab === 'events'}
           onClick={() => setSelectedTab('events')}
-        /> */}
+        />
       </div>
       {selectedTab === 'transaction' && (
         <div className="flex flex-col gap-4">
@@ -142,6 +174,16 @@ function DashboardContractDetailRoute(props: Props) {
             <TransactionCard key={t.hash} data={t} />
           ))}
         </div>
+      )}
+      {selectedTab === 'events' && (
+        <table className="w-full">
+          <EventHeader />
+          <tbody className="overflow-scroll">
+            {eventLists.map((e, i) => {
+              return <EventItem key={`${e.transactionHash}-${i}`} event={e} />;
+            })}
+          </tbody>
+        </table>
       )}
     </DashboardContractDetailRouteWrapper>
   );

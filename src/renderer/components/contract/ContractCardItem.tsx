@@ -48,10 +48,18 @@ function ContractCardItem({ contract }: Props) {
             className="text-xl text-emerald-500"
           />
           <div>
-            <div className="text-sm font-medium text-gray-900">
-              {contract.name}
+            <div
+              className={`text-sm font-medium ${
+                contract.name ? 'text-gray-900' : 'text-brand-400'
+              }`}
+            >
+              {contract.name || 'Unnamed Contract'}
             </div>
-            <div className="text-gray-600 text-sm">{contract.contractName}</div>
+            {contract.contractName && (
+              <div className="text-gray-600 text-sm">
+                {contract.contractName}
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -38,11 +38,11 @@ const HeaderMenuList = [
     icon: 'ri:contract-fill',
     link: '/dashboard/contracts',
   },
-  // {
-  //   title: 'Events',
-  //   icon: 'mdi:event-auto',
-  //   link: '/dashboard/events',
-  // },
+  {
+    title: 'Events',
+    icon: 'mdi:event-auto',
+    link: '/dashboard/events',
+  },
   {
     title: 'Logs',
     icon: 'carbon:cloud-logging',
@@ -74,7 +74,6 @@ function DashboardHeader(props: Props) {
     +layer === 1
       ? HeaderMenuList.filter((item) => item.title !== 'Predeploy Contracts')
       : HeaderMenuList;
-
 
   const getBlocknumber = async () => {
     if (!chain) return;

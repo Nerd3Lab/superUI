@@ -61,3 +61,36 @@ export const useTransactionsState = () =>
   useAppSelector((state) => state.transaction);
 export const {} = TransactionSlide.actions;
 export default TransactionSlide.reducer;
+
+export const useTransactionByHash = (chainId: typeChainID, hash: string) => {
+  const { items } = useTransactionsState();
+  return items[chainId]?.find((item) => item.hash === hash);
+};
+
+export const useTransactionByAddress = (
+  chainId: typeChainID,
+  address: string,
+) => {
+  const { items } = useTransactionsState();
+  return items[chainId]?.filter((item) => item.from === address);
+};
+
+export const useEventLogs = (chainId: typeChainID) => {
+  const { items } = useTransactionsState();
+  return (
+    items[chainId]?.flatMap((item) => {
+      if (item.logs) {
+        return item.logs;
+      }
+      return [];
+    }) || []
+  );
+};
+
+export const useEventLogsByAddress = (
+  chainId: typeChainID,
+  address: string,
+) => {
+  const logs = useEventLogs(chainId);
+  return logs.filter((log) => log.address === address);
+};

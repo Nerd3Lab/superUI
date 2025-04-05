@@ -37,8 +37,12 @@ const Modal: React.FC<ModalProps> = ({ modalId, children }) => {
     >
       <div
         onClick={handleClose}
-        className={`opacity-30 w-full h-full absolute top-0 left-0 backdrop-blur-sm ${
-          isVisible ? (opening ? 'bg-black opacity-40' : ' bg-black opacity-40') : 'opacity-0 '
+        className={`opacity-30 w-full h-full absolute top-0 left-0 ${
+          isVisible
+            ? opening
+              ? 'bg-black/70'
+              : ' bg-black/70'
+            : 'opacity-0 '
         }`}
       ></div>
       <div

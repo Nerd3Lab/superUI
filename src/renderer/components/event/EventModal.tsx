@@ -16,11 +16,12 @@ interface Props extends SimpleComponent {
 const EventModalWrapper = styled.div``;
 
 function EventModal({ event, decode, time, contract }: Props) {
+  console.log({ decode });
   const decodedList = decode ? Object.entries(decode.args) : [];
 
   const abi = contract?.abi?.find((e) => e.name === decode?.eventName);
   return (
-    <EventModalWrapper className='w-auto max-h-[80vh] overflow-auto'>
+    <EventModalWrapper className="w-auto max-h-[80vh] max-w-[80vw] overflow-auto">
       <div className="flex flex-col gap-4">
         <div className="text-lg font-semibold text-gray-900">Event Detail</div>
 
@@ -90,11 +91,13 @@ function EventModal({ event, decode, time, contract }: Props) {
               {decodedList.map((log, i) => {
                 return (
                   <div key={`log-${i}`}>
-                    <div className='flex items-center gap-2'>
-                      <span className='text-brand-300'>{abi?.inputs?.[i]?.type}</span>
-                      {log[0]}
+                    <div className="flex items-center gap-2">
+                      <span className="text-brand-300">
+                        {abi?.inputs?.[i]?.type}
+                      </span>
+                      {log[0].toString()}
                     </div>
-                    {log[1]}
+                    {log[1].toString()}
                   </div>
                 );
               })}

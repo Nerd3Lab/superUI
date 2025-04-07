@@ -5,12 +5,14 @@ import SuperchainWETH from './SuperchainWETH.json';
 import OptimismPortal from './OptimismPortal2.json';
 import L1CrossDomainMessenger from './L1CrossDomainMessenger.json';
 import L1StandardBridge from './L1StandardBridge.json';
+import ETHLiquidity from './ETHLiquidity.json';
 
 export const AbiPredeploy: any = {
   L2ToL2CrossDomainMessenger,
   CrossL2Inbox,
   SuperchainTokenBridge,
   SuperchainWETH,
+  ETHLiquidity,
 };
 
 export const AbiL1: any = {

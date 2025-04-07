@@ -68,13 +68,20 @@ function EventItem({ event }: Props) {
   }, [abiContract, event]);
 
   const openModalEvent = () => {
-    dispatch(openModal('eventModal'));
+    dispatch(
+      openModal(`eventModal-${event.transactionHash}-${event.logIndex}`),
+    );
   };
 
   return (
     <>
-      <Modal modalId={'eventModal'}>
-        <EventModal event={event} decode={decode} time={time} contract={contract}/>
+      <Modal modalId={`eventModal-${event.transactionHash}-${event.logIndex}`}>
+        <EventModal
+          event={event}
+          decode={decode}
+          time={time}
+          contract={contract}
+        />
       </Modal>
       <EventItemWrapper className="border-b-1 border-gray-200">
         <td className="text-left py-4">

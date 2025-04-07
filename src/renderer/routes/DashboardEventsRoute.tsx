@@ -27,20 +27,12 @@ function DashboardEventsRoute(props: Props) {
         <table className="w-full">
           <EventHeader />
           <tbody className="overflow-scroll">
-            {logsList.map((e) => {
-              return <EventItem event={e} />;
+            {logsList.map((e, i) => {
+              return <EventItem key={e.transactionHash + i} event={e} />;
             })}
           </tbody>
         </table>
       </div>
-
-      {/* <Pagination
-        totalPages={10}
-        currentPage={page}
-        onPageChange={(page) => {
-          setPage(page);
-        }}
-      /> */}
     </DashboardEventsRouteWrapper>
   );
 }

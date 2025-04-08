@@ -47,24 +47,6 @@ function DashboardAccountRoute(props: Props) {
         <TransferModal account={selectedAccount} />
       </Modal>
 
-      <div className="shadow-sm bg-white p-5 rounded-2xl border-1 border-gray-200">
-        <div className="flex justify-between text-gray-700 text-base">
-          <p>MNEMONIC</p>
-          <p>HD PATH</p>
-        </div>
-        <div className="flex justify-between text-gray-600 text-sm">
-          <p className="flex items-center gap-2">
-            sustain culture alert awake relax attitude acid local farm butter
-            coffee glad
-            <CopyText
-              value="sustain culture alert awake relax attitude acid local farm butter
-            coffee glad"
-            />
-          </p>
-          <p>m44'60'0'0account_index</p>
-        </div>
-      </div>
-
       {/* table */}
       <div className="w-full text-sm">
         <table className="w-full mt-4">
@@ -72,7 +54,7 @@ function DashboardAccountRoute(props: Props) {
             <tr className="border-b-1 border-gray-200">
               <th className="text-left py-3">Public key</th>
               <th className="text-left py-3">Balance</th>
-              <th className="text-left py-3">TX COUNT</th>
+              {/* <th className="text-left py-3">TX COUNT</th> */}
               <th className="text-left py-3">INDEX</th>
               <th className="text-left py-3"></th>
             </tr>
@@ -88,7 +70,7 @@ function DashboardAccountRoute(props: Props) {
                 <td className="text-left">
                   {formatBalanceWei(account.balance)}
                 </td>
-                <td className="text-left">0</td>
+                {/* <td className="text-left">0</td> */}
                 <td className="text-left">{account.index}</td>
                 <td className="text-left flex gap-2 items-center">
                   <div

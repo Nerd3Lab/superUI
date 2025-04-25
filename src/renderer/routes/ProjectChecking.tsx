@@ -34,7 +34,7 @@ function ProjectChecking(props: Props) {
   console.log(logs);
 
   const startCheckAnvil = async () => {
-    await window.electron.foudry.check();
+    await window.electron.foundry.check();
   };
 
   useEffect(() => {

@@ -59,7 +59,7 @@ const electronHandler = {
         error: any;
       }>,
   },
-  foudry: {
+  foundry: {
     check: () =>
       ipcRenderer.invoke('check-foundry') as Promise<{
         isSuccess: boolean;
@@ -97,7 +97,7 @@ const electronHandler = {
     setDirectory: (type: 'hardhat' | 'foundry') =>
       ipcRenderer.invoke(
         'set-directory',
-        type,
+        type
       ) as Promise<setDirectoryResponse>,
     uploadAbi: () =>
       ipcRenderer.invoke('upload-abi') as Promise<setDirectoryResponse>,
